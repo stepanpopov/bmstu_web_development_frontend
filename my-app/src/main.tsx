@@ -4,13 +4,13 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 
-import DataServicePage from "./components/DataServicePage/DataServicePage.tsx";
-import DataServiceList from "./components/DataServiceList/DataServiceList.tsx";
+import DataServicePage from "./pages/DataServicePage/DataServicePage.tsx";
+import DataServiceListPage from "./pages/DataServiceListPage/DataServiceListPage.tsx";
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <DataServiceList/>
+    element: <DataServiceListPage/>
   },
   {
     path: '/service/:id',

@@ -2,49 +2,45 @@ import {useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import DataServiceCard from "../DataServiceCard/DataServiceCard.tsx";
 import {DataService} from "../../models/models.ts";
-import {DOMEN, requestTime, dataServicesMock} from "../../Consts"
+import { Button, Spinner } from "react-bootstrap"
+import filterDataList from "../../modules/filterDataServices.ts";
+import { dataServicesMock } from "../../Consts.tsx";
 
 const DataServiceList = () => {
-    const [dataServices, setDataServices] = useState<DataService[]>([]);  
+    const [dataServices, setDataServices] = useState<DataService[]>(dataServicesMock);  
+
+    const [loading, setLoading] = useState(true);
+    const [searchValue, setSearchValue] = useState('')
 
     const navigate = useNavigate()
 
-    const fetchDataList = async () => {
-        try {
-            const response = await fetch(`${DOMEN}/`, {
-                method: "GET",
-                signal: AbortSignal.timeout(requestTime)
-            })
-
-            if (!response.ok){
-                mockDataServices();
-                return;
-            }
-
-            const dataServices: DataService[] = await response.json()
-            setDataServices(dataServices)
-        } catch (e) {
-            mockDataServices()
-        }
-    }
-
-    const mockDataServices = () => {
-        setDataServices(dataServicesMock)
-    }
+    const fetchDSList = async () => {
+        const dsList: DataService[] = await filterDataList(searchValue);
+        setDataServices(dsList)
+        setLoading(false)
+    };
 
     useEffect(() => {
-        fetchDataList();
-    }, [])
+        fetchDSList();
+    }, [searchValue])
 
     return (
-       <div className="cards">
-            {dataServices.map((ds) => (
-                <DataServiceCard 
-                    ds={ds}
-                    onClick={(id) => (navigate(`service/${id}`, {state: {ds: ds}}))}
-                />
-            ))}
-       </div>
+        <div>
+            {loading && <div className="loadingBg"><Spinner animation="border"/></div>}
+
+            <div className="cards">
+                <div className="inputField">
+                    <input value={searchValue} onChange={(event => setSearchValue(event.target.value))}/>
+                </div>
+                
+                {dataServices.map((ds) => (
+                    <DataServiceCard 
+                        ds={ds}
+                        onClick={(id) => (navigate(`service/${id}`, {state: {ds: ds}}))}
+                    />
+                ))}
+            </div>
+        </div>
     );
 };
 
