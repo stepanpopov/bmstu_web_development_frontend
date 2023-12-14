@@ -5,16 +5,17 @@ import { Container } from 'react-bootstrap';
 import DataServiceCard from '../../components/DataServiceCard/DataServiceCard.tsx';
 import {DataService} from "../../models/models.ts";
 import { useEffect, useState } from 'react';
-import { dataServicesMock, mainPage } from '../../Consts.tsx';
+import { dataServicesMock, mainPage, navTitle } from '../../Consts.tsx';
 import Navbar from '../../components/Navbar/Navbar.tsx'
 import Footer from '../../components/Footer/Footer.tsx';
+import DataServiceBigCard from '../../components/DataServiceBigCard/DataServiceBigCard.tsx';
 
 
 const DataServicePage = () => {
     const {id} = useParams()
     const location = useLocation()
 
-    const [dataService, setDataService] = useState<DataService>(dataServicesMock[0])
+    const [dataService, setDataService] = useState<DataService>()
 
     const [loading, setLoading] = useState(true)
 
@@ -32,9 +33,9 @@ const DataServicePage = () => {
 
     return (
         <Container>
-            <Navbar title='DATA SERVICE' link='/'/>
-            <BreadCrumbs pages={[mainPage, {link: location.pathname, title: 'Data'},]}></BreadCrumbs>
-            {!loading && <DataServiceCard ds={dataService!} onClick={() => null}></DataServiceCard>}
+            <Navbar title={navTitle} link='/'/>
+            {!loading && <BreadCrumbs pages={[mainPage, {link: location.pathname, title: dataService!.name},]}></BreadCrumbs>}
+            {!loading && <DataServiceBigCard ds={dataService!}></DataServiceBigCard>}
             <Footer />
         </Container>
     );

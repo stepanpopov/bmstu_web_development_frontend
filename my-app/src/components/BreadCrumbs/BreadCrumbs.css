@@ -1,9 +1,11 @@
 .breadcrumb-not-active {
     color: #cccccc;
+    font-size: 130%;
 }
   
 .breadcrumb-active {
-    color: #941010;
+    color: #32084a;
+    font-size: 130%;
 }
   
 .breadcrumb-arrow {

@@ -4,7 +4,7 @@ import { DataService } from "../models/models"
 interface RawDataService {
 	data_id: number,
     data_name: string,
-    endcode: boolean,
+    encode: boolean,
     blob: string,
     active: boolean,
     image_url: string,
@@ -22,7 +22,14 @@ const filterDataList = async (search: string): Promise<DataService[]> => {
     })
     .then((res) => res.json())
     .then((resp: RawFilteringResponse) => (
-        resp.data_service.map((ds: RawDataService) => ({id: ds.data_id, name: ds.data_name, blob: ds.blob, image: ds.image_url}) )
+        resp.data_service.map((ds: RawDataService) => ({
+            id: ds.data_id, 
+            name: ds.data_name, 
+            blob: ds.blob, 
+            image: ds.image_url,
+            encode: ds.encode,
+            active: ds.active,
+        }) )
     ))
     .catch(() => dataServicesMock)
 }

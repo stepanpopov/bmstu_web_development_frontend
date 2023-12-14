@@ -34,7 +34,7 @@ const DataServiceList = ({searchValue}: DataServiceListProps) => {
         <ListGroup className="cards">
             {loading && <div className="loadingBg"><Spinner animation="border"/></div>}
  
-            {!loading && dataServices.map((ds) => (
+            {!loading && dataServices.filter((ds) => (ds.active)).map((ds) => (
                 <DataServiceCard 
                     ds={ds}
                     onClick={(id) => (navigate(`service/${id}`, {state: {ds: ds}}))}

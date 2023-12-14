@@ -1,15 +1,28 @@
-import {useLocation} from 'react-router-dom';
+import './DataServiceBigCard.css'
+import {DataService} from '../../models/models.ts'
+import { Card } from 'react-bootstrap';
 
-const DataServicePage = () => {
-    let {state} = useLocation()
-    let {ds} = state
+export interface DataServiceBigCardProps {
+    ds: DataService,
+}
+
+const DataServiceBigCard = ({ds}: DataServiceBigCardProps) => {
     return (
-        <div>
-            <div className = 'title'> {ds.name} </div>
-            <div> ID: {ds.id} </div>
-            <div style={{ width: '100%' }}>{ds.blob}</div> 
-        </div>
+        <Card className="page_card">
+            { ds.active ?
+            <Card.Body>
+                <div>
+                    <Card.Title className = 'page_card_title'>{ds.name}</Card.Title>
+                    <div className = 'page_card_id'>  ID: {ds.id} </div>
+                    <div className = 'page_blob' style={{ width: '100%' }}>{ds.blob}</div>
+                    <div className = 'page_card_encode'> {ds.encode ? 'Данные зашифрованы' : 'Данные расшифрованы'} </div>
+                </div>
+            <Card.Img src={ds.image} alt=''/>
+            </Card.Body> :
+            <h2>Данные удалены</h2>
+            }
+        </Card>
     );
 };
 
-export default DataServicePage;
+export default DataServiceBigCard;

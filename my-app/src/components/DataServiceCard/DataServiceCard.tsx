@@ -10,20 +10,19 @@ export interface DataServiceCardProps {
 const DataServiceCard = ({ds, onClick}: DataServiceCardProps) => {
     return (
         <Card className="card">
+            { ds.active ?
             <Card.Body>
-                <Card.Img src={ds.image} alt=''/>
                 <div onClick={() => onClick(ds.id)}>
                     <Card.Title className = 'card_title'>{ds.name}</Card.Title>
                     <div className = 'card_id'>  ID: {ds.id} </div>
-                    <div style={{ width: '100%' }}>{ds.blob}</div> 
+                    <div style={{ width: '100%' }}>{ds.blob}</div>
                 </div>
-            </Card.Body>
+            <Card.Img src={ds.image} alt=''/>
+            </Card.Body> :
+            <h2>Данные удалены</h2>
+            }
         </Card>
     );
 };
-
-/*<div className='delete' onClick={deleteHandler}>
-                    <img src="/static/img/delete.png" />
-                </div>*/
 
 export default DataServiceCard;

@@ -2,7 +2,7 @@ import {useNavigate, useLocation} from 'react-router-dom';
 import DataServiceList from "../../components/DataServiceList/DataServiceList.tsx";
 import BreadCrumbs from "../../components/BreadCrumbs/BreadCrumbs.tsx";
 import { Container } from 'react-bootstrap';
-import { mainPage } from '../../Consts.tsx';
+import { mainPage, navTitle } from '../../Consts.tsx';
 import Navbar from '../../components/Navbar/Navbar.tsx'
 import InputFilter from '../../components/InputFilter/InputFilter.tsx';
 import { useState } from 'react';
@@ -14,7 +14,7 @@ const DataServiceListPage = () => {
 
     return (
         <Container>
-            <Navbar title='DATA SERVICE' link='/'/>
+            <Navbar title={navTitle} link='/'/>
             <BreadCrumbs pages={[mainPage]} />
             <Container>
                 <InputFilter searchValue={searchValue} setSearchValue={setSearchValue} />
