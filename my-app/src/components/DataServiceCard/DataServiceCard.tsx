@@ -1,5 +1,6 @@
 import './DataServiceCard.css'
 import {DataService} from '../../models/models.ts'
+import { Card } from 'react-bootstrap';
 
 export interface DataServiceCardProps {
     ds: DataService,
@@ -7,21 +8,17 @@ export interface DataServiceCardProps {
 }
 
 const DataServiceCard = ({ds, onClick}: DataServiceCardProps) => {
-    const deleteHandler = () => {
-        console.log(`delete ${ds.id}`)
-    }
-    console.log(ds)
-
     return (
-        <div className="card">
-            <a>
+        <Card className="card">
+            <Card.Body>
+                <Card.Img src={ds.image} alt=''/>
                 <div onClick={() => onClick(ds.id)}>
-                    <div className = 'title'> {ds.name} </div>
-                    <div> ID: {ds.id} </div>
+                    <Card.Title className = 'card_title'>{ds.name}</Card.Title>
+                    <div className = 'card_id'>  ID: {ds.id} </div>
                     <div style={{ width: '100%' }}>{ds.blob}</div> 
                 </div>
-            </a>
-        </div>
+            </Card.Body>
+        </Card>
     );
 };
 

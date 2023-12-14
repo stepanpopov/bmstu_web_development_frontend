@@ -1,0 +1,57 @@
+.card {
+    width: 50%;
+    height: 25%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 30px;
+    position: relative;
+}
+
+.card a {
+    text-decoration: none;
+    color: rgb(254, 252, 252);
+}
+
+.card::before {
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: blur(3px);
+    /* background-image: url('/static/img/binary.png'); */
+    position: absolute;
+}
+
+.card .card_title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card .delete {
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    z-index: 1;
+    margin: 0%;
+    padding: 0%;
+}
+
+.card .delete button {
+    background: transparent;
+    cursor:pointer;
+}
+
+.card .delete button img {
+    width: 50%;
+    height: 50%;
+}
+
+.card div {
+    position: relative;
+}

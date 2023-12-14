@@ -1,0 +1,21 @@
+.navbar {
+    background-color: green;
+    padding: 20px;
+    color: white;
+    margin: 0%;
+}
+
+.navbar .link {
+    font-size: 20px;
+    display: inline;
+    top: 50%;
+    left: 50%;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar div {
+    text-align: center;
+}
+
+

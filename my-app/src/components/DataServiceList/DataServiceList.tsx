@@ -2,15 +2,21 @@ import {useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import DataServiceCard from "../DataServiceCard/DataServiceCard.tsx";
 import {DataService} from "../../models/models.ts";
-import { Button, Spinner } from "react-bootstrap"
+import { Button, ListGroup, Spinner } from "react-bootstrap"
 import filterDataList from "../../modules/filterDataServices.ts";
 import { dataServicesMock } from "../../Consts.tsx";
 
-const DataServiceList = () => {
+import './DataServiceList.css'
+
+interface DataServiceListProps {
+    searchValue: string;
+}
+
+const DataServiceList = ({searchValue}: DataServiceListProps) => {
     const [dataServices, setDataServices] = useState<DataService[]>(dataServicesMock);  
 
     const [loading, setLoading] = useState(true);
-    const [searchValue, setSearchValue] = useState('')
+    // const [searchValue, setSearchValue] = useState('')
 
     const navigate = useNavigate()
 
@@ -25,22 +31,16 @@ const DataServiceList = () => {
     }, [searchValue])
 
     return (
-        <div>
+        <ListGroup className="cards">
             {loading && <div className="loadingBg"><Spinner animation="border"/></div>}
-
-            <div className="cards">
-                <div className="inputField">
-                    <input value={searchValue} onChange={(event => setSearchValue(event.target.value))}/>
-                </div>
-                
-                {dataServices.map((ds) => (
-                    <DataServiceCard 
-                        ds={ds}
-                        onClick={(id) => (navigate(`service/${id}`, {state: {ds: ds}}))}
-                    />
-                ))}
-            </div>
-        </div>
+ 
+            {!loading && dataServices.map((ds) => (
+                <DataServiceCard 
+                    ds={ds}
+                    onClick={(id) => (navigate(`service/${id}`, {state: {ds: ds}}))}
+                />
+            ))}
+        </ListGroup>
     );
 };
 

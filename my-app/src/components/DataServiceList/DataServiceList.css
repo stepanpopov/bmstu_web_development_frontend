@@ -1,0 +1,15 @@
+.loadingBg {
+    z-index: 999;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cards {
+    text-align: center;
+    margin: 30px;
+    display: flex;
+}
