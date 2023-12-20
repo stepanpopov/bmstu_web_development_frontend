@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import DataServiceCard from "../DataServiceCard/DataServiceCard.tsx";
 import {DataService} from "../../models/models.ts";
-import { Button, ListGroup, Spinner } from "react-bootstrap"
+import { ListGroup, Spinner } from "react-bootstrap"
 import filterDataList from "../../modules/filterDataServices.ts";
 import { dataServicesMock } from "../../Consts.tsx";
 

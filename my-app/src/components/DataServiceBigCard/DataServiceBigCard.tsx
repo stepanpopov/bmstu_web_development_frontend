@@ -6,6 +6,11 @@ export interface DataServiceBigCardProps {
     ds: DataService,
 }
 
+const handlerImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = '/binary.png';
+}
+
 const DataServiceBigCard = ({ds}: DataServiceBigCardProps) => {
     return (
         <Card className="page_card">
@@ -17,7 +22,7 @@ const DataServiceBigCard = ({ds}: DataServiceBigCardProps) => {
                     <div className = 'page_blob' style={{ width: '100%' }}>{ds.blob}</div>
                     <div className = 'page_card_encode'> {ds.encode ? 'Данные зашифрованы' : 'Данные расшифрованы'} </div>
                 </div>
-            <Card.Img src={ds.image} alt=''/>
+            <Card.Img src={ds.image} alt='' style={{width: '70%', height: '70%'}} onError={handlerImgError}/>
             </Card.Body> :
             <h2>Данные удалены</h2>
             }

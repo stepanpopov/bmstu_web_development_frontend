@@ -1,4 +1,3 @@
-import {useNavigate, useLocation} from 'react-router-dom';
 import DataServiceList from "../../components/DataServiceList/DataServiceList.tsx";
 import BreadCrumbs from "../../components/BreadCrumbs/BreadCrumbs.tsx";
 import { Container } from 'react-bootstrap';

@@ -2,10 +2,9 @@ import {useLocation, useParams} from 'react-router-dom';
 import BreadCrumbs from "../../components/BreadCrumbs/BreadCrumbs.tsx";
 import getDsByID from '../../modules/getDsById.ts';
 import { Container } from 'react-bootstrap';
-import DataServiceCard from '../../components/DataServiceCard/DataServiceCard.tsx';
 import {DataService} from "../../models/models.ts";
 import { useEffect, useState } from 'react';
-import { dataServicesMock, mainPage, navTitle } from '../../Consts.tsx';
+import { mainPage, navTitle } from '../../Consts.tsx';
 import Navbar from '../../components/Navbar/Navbar.tsx'
 import Footer from '../../components/Footer/Footer.tsx';
 import DataServiceBigCard from '../../components/DataServiceBigCard/DataServiceBigCard.tsx';
