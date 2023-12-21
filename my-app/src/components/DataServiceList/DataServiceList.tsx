@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import DataServiceCard from "../DataServiceCard/DataServiceCard.tsx";
 import {DataService} from "../../models/models.ts";
-import { ListGroup, Spinner } from "react-bootstrap"
+import { Container, Spinner } from "react-bootstrap"
 import filterDataList from "../../modules/filterDataServices.ts";
 import { dataServicesMock } from "../../Consts.tsx";
 
@@ -31,7 +31,7 @@ const DataServiceList = ({searchValue}: DataServiceListProps) => {
     }, [searchValue])
 
     return (
-        <ListGroup className="cards">
+        <Container className="cards">
             {loading && <div className="loadingBg"><Spinner animation="border"/></div>}
  
             {!loading && dataServices.filter((ds) => (ds.active)).map((ds) => (
@@ -40,7 +40,7 @@ const DataServiceList = ({searchValue}: DataServiceListProps) => {
                     onClick={(id) => (navigate(`service/${id}`, {state: {ds: ds}}))}
                 />
             ))}
-        </ListGroup>
+        </Container>
     );
 };
 

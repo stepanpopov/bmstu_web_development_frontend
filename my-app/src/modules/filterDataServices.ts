@@ -31,7 +31,7 @@ const filterDataList = async (search: string): Promise<DataService[]> => {
             active: ds.active,
         }) )
     ))
-    .catch(() => dataServicesMock)
+    .catch(() => dataServicesMock.filter((ds) => ds.name.includes(search)))
 }
 
 export default filterDataList

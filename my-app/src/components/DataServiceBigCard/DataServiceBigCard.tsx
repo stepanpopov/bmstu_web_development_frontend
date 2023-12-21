@@ -1,6 +1,6 @@
 import './DataServiceBigCard.css'
 import {DataService} from '../../models/models.ts'
-import { Card } from 'react-bootstrap';
+import { Card, Container, Image } from 'react-bootstrap';
 
 export interface DataServiceBigCardProps {
     ds: DataService,
@@ -13,20 +13,20 @@ const handlerImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
 
 const DataServiceBigCard = ({ds}: DataServiceBigCardProps) => {
     return (
-        <Card className="page_card">
+        <Container className="page_card">
             { ds.active ?
-            <Card.Body>
+            <Container>
                 <div>
                     <Card.Title className = 'page_card_title'>{ds.name}</Card.Title>
                     <div className = 'page_card_id'>  ID: {ds.id} </div>
                     <div className = 'page_blob' style={{ width: '100%' }}>{ds.blob}</div>
                     <div className = 'page_card_encode'> {ds.encode ? 'Данные зашифрованы' : 'Данные расшифрованы'} </div>
                 </div>
-            <Card.Img src={ds.image} alt='' style={{width: '70%', height: '70%'}} onError={handlerImgError}/>
-            </Card.Body> :
+            <Image src={ds.image} alt='' style={{width: '40%', height: '40%'}} onError={handlerImgError}/>
+            </Container> :
             <h2>Данные удалены</h2>
             }
-        </Card>
+        </Container>
     );
 };
 

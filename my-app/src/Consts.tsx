@@ -5,8 +5,17 @@ export const DOMAIN = "http://localhost/api"
 export const requestTime = 1000
 
 export const dataServicesMock: DataService[] = [
-    {id: 5, name: 'sectret', blob: 'blalba', encode: true, active: true},
-    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true},
+    {id: 5, name: 'sectret', blob: 'blalba', encode: true, active: true, image: '0'},
+    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
+    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
+    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
+    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
+    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
+    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
+    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
+    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
+    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
+    {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
 ]
 
 export const mainPage: Page = {link: '/', title: 'Данные для шифрования'}
