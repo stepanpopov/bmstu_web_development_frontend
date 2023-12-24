@@ -13,7 +13,7 @@ const DataServiceListPage = () => {
 
     return (
         <Container>
-            <Navbar title={navTitle} link='/'/>
+            <Navbar title={navTitle} link='/rip_frontend'/>
             <BreadCrumbs pages={[mainPage]} />
             <Container>
                 <InputFilter searchValue={searchValue} setSearchValue={setSearchValue} />

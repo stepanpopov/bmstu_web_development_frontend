@@ -32,7 +32,7 @@ const DataServicePage = () => {
 
     return (
         <Container>
-            <Navbar title={navTitle} link='/'/>
+            <Navbar title={navTitle} link='/rip_frontend'/>
             {!loading && <BreadCrumbs pages={[mainPage, {link: location.pathname, title: dataService!.name},]}></BreadCrumbs>}
             {!loading && <DataServiceBigCard ds={dataService!}></DataServiceBigCard>}
             <Footer />

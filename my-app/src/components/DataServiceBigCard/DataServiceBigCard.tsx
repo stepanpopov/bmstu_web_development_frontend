@@ -2,13 +2,15 @@ import './DataServiceBigCard.css'
 import {DataService} from '../../models/models.ts'
 import { Card, Container, Image } from 'react-bootstrap';
 
+const img = new URL('/binary.png', import.meta.url).href
+
 export interface DataServiceBigCardProps {
     ds: DataService,
 }
 
 const handlerImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.onerror = null;
-    e.currentTarget.src = '/binary.png';
+    e.currentTarget.src = img;
 }
 
 const DataServiceBigCard = ({ds}: DataServiceBigCardProps) => {

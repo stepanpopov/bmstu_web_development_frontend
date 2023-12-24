@@ -9,11 +9,11 @@ import DataServiceListPage from "./pages/DataServiceListPage/DataServiceListPage
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/rip_frontend',
     element: <DataServiceListPage/>
   },
   {
-    path: '/service/:id',
+    path: '/rip_frontend/service/:id',
     element: <DataServicePage/>
   }
 ])
