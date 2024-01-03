@@ -16,7 +16,7 @@ interface RawFilteringResponse {
 }
 
 const filterDataList = async (search: string): Promise<DataService[]> => {
-    return fetch(`${DOMAIN}/dataService?dataname=${search}`, {
+    return fetch(`${DOMAIN}/dataService/?dataname=${search}`, {
         method: "GET",
         signal: AbortSignal.timeout(requestTime)
     })

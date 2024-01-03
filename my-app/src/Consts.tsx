@@ -18,6 +18,6 @@ export const dataServicesMock: DataService[] = [
     {id: 6, name: 'aaaa', blob: 'aaaa', encode: true, active: true, image: '0'},
 ]
 
-export const mainPage: Page = {link: '/rip_frontend', title: 'Данные для шифрования'}
+export const mainPage: Page = {link: '/', title: 'Данные для шифрования'}
 
 export const navTitle = 'ШИФРОВАНИЕ КОДОМ ДЛЯ КОРРЕКЦИИ ОШИБОК';
