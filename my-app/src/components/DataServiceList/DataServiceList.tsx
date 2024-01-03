@@ -1,10 +1,12 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import DataServiceCard from "../DataServiceCard/DataServiceCard.tsx";
-import {DataService} from "../../models/models.ts";
+import DataService from "../../models/dataService.ts";
 import { Container, Spinner } from "react-bootstrap"
-import filterDataList from "../../modules/filterDataServices.ts";
-import { dataServicesMock } from "../../Consts.tsx";
+
+import {useAppDispatch} from "../../store";
+import { dataSericeActions, useDataServices, filterDataListByName } from '../../store/dataServiceList/index.ts'
+
 
 import './DataServiceList.css'
 
@@ -13,28 +15,20 @@ interface DataServiceListProps {
 }
 
 const DataServiceList = ({searchValue}: DataServiceListProps) => {
-    const [dataServices, setDataServices] = useState<DataService[]>(dataServicesMock);  
-
-    const [loading, setLoading] = useState(true);
-    // const [searchValue, setSearchValue] = useState('')
+    const dispatch = useAppDispatch()
+    const dataServices = useDataServices()
 
     const navigate = useNavigate()
 
-    const fetchDSList = async () => {
-        const dsList: DataService[] = await filterDataList(searchValue);
-        setDataServices(dsList)
-        setLoading(false)
-    };
-
     useEffect(() => {
-        fetchDSList();
+        dispatch(filterDataListByName(searchValue))
     }, [searchValue])
 
     return (
         <Container className="cards">
-            {loading && <div className="loadingBg"><Spinner animation="border"/></div>}
+            {/* {loading && <div className="loadingBg"><Spinner animation="border"/></div>} */}
  
-            {!loading && dataServices.filter((ds) => (ds.active)).map((ds) => (
+            {dataServices.filter((ds) => (ds.active)).map((ds) => (
                 <DataServiceCard 
                     ds={ds}
                     onClick={(id) => (navigate(`service/${id}`, {state: {ds: ds}}))}

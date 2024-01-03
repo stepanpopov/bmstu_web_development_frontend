@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import "./BreadCrumbs.css";
-import { Page } from '../../models/models';
+import { Page } from '../../models/common';
 
 interface BreadcrumbsProps {
     pages: Page[]

@@ -1,5 +1,5 @@
-import { DOMAIN, dataServicesMock, requestTime } from "../Consts";
-import {DataService} from "../models/models.ts"
+import { DOMAIN, dataServicesMock, requestTime } from "../../consts.tsx";
+import DataService from "../../models/dataService"
 
 interface RawDataService {
 	data_id: number,
@@ -10,7 +10,7 @@ interface RawDataService {
     image_url: string,
 }
 
-const getDsByID = async (id: number): Promise<DataService> => {
+export const fetchDsByID = async (id: number): Promise<DataService> => {
     return fetch(`${DOMAIN}/dataService/${id}`, {
         method: "GET",
         signal: AbortSignal.timeout(requestTime)
@@ -25,5 +25,3 @@ const getDsByID = async (id: number): Promise<DataService> => {
     }))
     .catch(() => (dataServicesMock.length - 1 > id ? dataServicesMock[id] : dataServicesMock[0]))
 };
-
-export default getDsByID;

@@ -1,4 +1,5 @@
-import {DataService, Page} from "./models/models"
+import { Page } from "./models/common"
+import DataService from "./models/dataService"
 
 export const DOMAIN = "http://localhost/api"
 

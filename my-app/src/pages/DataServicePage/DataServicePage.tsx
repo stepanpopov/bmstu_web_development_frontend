@@ -1,32 +1,38 @@
 import {useLocation, useParams} from 'react-router-dom';
-import BreadCrumbs from "../../components/BreadCrumbs/BreadCrumbs.tsx";
-import getDsByID from '../../modules/getDsById.ts';
+import BreadCrumbs from "../../components/BreadCrumbs/BreadCrumbs.tsx";;
 import { Container } from 'react-bootstrap';
-import {DataService} from "../../models/models.ts";
+import DataService from "../../models/dataService";
 import { useEffect, useState } from 'react';
-import { mainPage, navTitle } from '../../Consts.tsx';
+import { mainPage, navTitle } from '../../consts.tsx';
 import Navbar from '../../components/Navbar/Navbar.tsx'
 import Footer from '../../components/Footer/Footer.tsx';
 import DataServiceBigCard from '../../components/DataServiceBigCard/DataServiceBigCard.tsx';
 
+import {useAppDispatch} from "../../store";
+import { dataSericeActions, useDataServices, getDsByID } from '../../store/dataServiceList/index.ts'
+
 
 const DataServicePage = () => {
-    const {id} = useParams()
     const location = useLocation()
 
-    const [dataService, setDataService] = useState<DataService>()
+    const {id} = useParams()
+    // handle not convertable id
+    const dispatch = useAppDispatch()
 
-    const [loading, setLoading] = useState(true)
+    useEffect(() => {
+        dispatch(getDsByID(id == undefined ? 0 : +id))
+    }, [id])
 
-    const fetchDS = async () => {
+    const dataService = 
+    
+
+    /*const fetchDS = async () => {
         const ds: DataService = await getDsByID(id == undefined ? 0 : +id)
         setDataService(ds)
         setLoading(false)
-    }
+    }*/
 
-    useEffect(() => {
-        fetchDS()
-    }, [id])
+
 
     console.log(dataService)
 

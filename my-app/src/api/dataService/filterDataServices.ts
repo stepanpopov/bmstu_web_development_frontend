@@ -1,5 +1,5 @@
-import {DOMAIN, requestTime, dataServicesMock} from "../Consts"
-import { DataService } from "../models/models"
+import {DOMAIN, requestTime, dataServicesMock} from "../../consts"
+import DataService from "../../models/dataService"
 
 interface RawDataService {
 	data_id: number,
@@ -15,7 +15,7 @@ interface RawFilteringResponse {
     draft_id: number,
 }
 
-const filterDataList = async (search: string): Promise<DataService[]> => {
+export const fetchDataListByName = async (search: string): Promise<DataService[]> => {
     return fetch(`${DOMAIN}/dataService/?dataname=${search}`, {
         method: "GET",
         signal: AbortSignal.timeout(requestTime)
@@ -33,5 +33,3 @@ const filterDataList = async (search: string): Promise<DataService[]> => {
     ))
     .catch(() => dataServicesMock.filter((ds) => ds.name.includes(search)))
 }
-
-export default filterDataList

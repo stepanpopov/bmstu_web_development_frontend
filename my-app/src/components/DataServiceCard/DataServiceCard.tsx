@@ -1,5 +1,5 @@
 import './DataServiceCard.css'
-import {DataService} from '../../models/models.ts'
+import DataService from "../../models/dataService";
 import { Card, Container } from 'react-bootstrap';
 
 const img = new URL('/binary.png', import.meta.url).href
