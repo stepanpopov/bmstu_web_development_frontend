@@ -1,20 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-
-import { fetchDsByID, fetchDataListByName } from '../../api/dataService'
+import { fetchDsByID } from '../../api/dataService'
 import DataService from '../../models/dataService';
 
-export const filterDataListByName = createAsyncThunk<DataService[], string>(
-    'dataService/findByStatus', 
-    async (name) => {
-        const dataList = await fetchDataListByName(name)
-        return dataList
-    }
-)
-
 export const getDsByID = createAsyncThunk<DataService, number>(
-    'dataService/findByStatus', 
+    'dataService/getDSByID', 
     async (id) => {
+        console.log('started fetching data')
         const data = await fetchDsByID(id)
+        console.log('data fetched')
         return data
     }
 )

@@ -1,13 +1,11 @@
 .card {
-    width: 50%;
-    height: 25%;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 30px;
     position: relative;
-    flex: 10%;
+    flex: 20%;
     flex-grow: 0;
 }
 

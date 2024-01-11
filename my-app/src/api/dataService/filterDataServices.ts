@@ -1,35 +1,27 @@
-import {DOMAIN, requestTime, dataServicesMock} from "../../consts"
+import { DOMAIN, requestTime } from "../../consts"
 import DataService from "../../models/dataService"
-
-interface RawDataService {
-	data_id: number,
-    data_name: string,
-    encode: boolean,
-    blob: string,
-    active: boolean,
-    image_url: string,
-}
+import { RawDataService } from "../models";
+import axios from "axios";
 
 interface RawFilteringResponse {
     data_service: RawDataService[],
     draft_id: number,
 }
 
+const config = (search: string) => ({
+    method: "get",
+    url: `${DOMAIN}/dataService/?dataname=${search}`,
+    timeout: requestTime,  
+})
+
 export const fetchDataListByName = async (search: string): Promise<DataService[]> => {
-    return fetch(`${DOMAIN}/dataService/?dataname=${search}`, {
-        method: "GET",
-        signal: AbortSignal.timeout(requestTime)
-    })
-    .then((res) => res.json())
-    .then((resp: RawFilteringResponse) => (
-        resp.data_service.map((ds: RawDataService) => ({
-            id: ds.data_id, 
-            name: ds.data_name, 
-            blob: ds.blob, 
-            image: ds.image_url,
-            encode: ds.encode,
-            active: ds.active,
-        }) )
-    ))
-    .catch(() => dataServicesMock.filter((ds) => ds.name.includes(search)))
+    const resp = await axios<RawFilteringResponse>(config(search))
+    return resp.data.data_service.map((ds: RawDataService) => ({
+        id: ds.data_id, 
+        name: ds.data_name, 
+        blob: ds.blob, 
+        image: ds.image_url,
+        encode: ds.encode,
+        active: ds.active,
+    }) )
 }

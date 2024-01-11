@@ -1,6 +1,6 @@
 import {useLocation, useParams} from 'react-router-dom';
-import BreadCrumbs from "../../components/BreadCrumbs/BreadCrumbs.tsx";;
-import { Container } from 'react-bootstrap';
+import { Container} from 'react-bootstrap';
+import Spinner from 'react-bootstrap/Spinner'
 import DataService from "../../models/dataService";
 import { useEffect, useState } from 'react';
 import { mainPage, navTitle } from '../../consts.tsx';
@@ -9,37 +9,41 @@ import Footer from '../../components/Footer/Footer.tsx';
 import DataServiceBigCard from '../../components/DataServiceBigCard/DataServiceBigCard.tsx';
 
 import {useAppDispatch} from "../../store";
-import { dataSericeActions, useDataServices, getDsByID } from '../../store/dataServiceList/index.ts'
+import { dataServiceActions, useDataService, useLoading, getDsByID } from '../../store/dataService/index.ts'
+import { Page, SetPage, SetPageTitleLink } from '../../models/common.ts';
 
+interface Props {
+    setPage: SetPageTitleLink
+}
 
-const DataServicePage = () => {
+const DataServicePage = ({ setPage }: Props) => {
     const location = useLocation()
 
     const {id} = useParams()
     // handle not convertable id
     const dispatch = useAppDispatch()
 
+    console.log(id)
+
+    const dataService = useDataService()
+    const loading = useLoading()
+
     useEffect(() => {
         dispatch(getDsByID(id == undefined ? 0 : +id))
     }, [id])
 
-    const dataService = 
-    
+    useEffect(() => {
+        if (!loading) {
+            setPage(location.pathname, dataService!.name)
+        }
+    }, [loading])
 
-    /*const fetchDS = async () => {
-        const ds: DataService = await getDsByID(id == undefined ? 0 : +id)
-        setDataService(ds)
-        setLoading(false)
-    }*/
-
-
-
+    console.log(loading)
     console.log(dataService)
 
     return (
         <Container>
-            <Navbar title={navTitle} link='/'/>
-            {!loading && <BreadCrumbs pages={[mainPage, {link: location.pathname, title: dataService!.name},]}></BreadCrumbs>}
+            {loading && <Spinner animation="border" variant="success" />}
             {!loading && <DataServiceBigCard ds={dataService!}></DataServiceBigCard>}
             <Footer />
         </Container>

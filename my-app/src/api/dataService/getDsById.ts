@@ -1,27 +1,25 @@
-import { DOMAIN, dataServicesMock, requestTime } from "../../consts.tsx";
+import { DOMAIN, requestTime } from "../../consts.tsx";
 import DataService from "../../models/dataService"
+import { RawDataService } from "../models";
+import axios from "axios";
 
-interface RawDataService {
-	data_id: number,
-    data_name: string,
-    encode: boolean,
-    blob: string,
-    active: boolean,
-    image_url: string,
-}
+const config = (id: number) => ({
+    method: "get",
+    url: `${DOMAIN}/dataService/${id}`,
+    timeout: requestTime,  
+})
 
 export const fetchDsByID = async (id: number): Promise<DataService> => {
-    return fetch(`${DOMAIN}/dataService/${id}`, {
-        method: "GET",
-        signal: AbortSignal.timeout(requestTime)
-    }).then((resp) => resp.json())
-    .then((resp: RawDataService) => ({
-        id: resp.data_id, 
-        name: resp.data_name, 
-        blob: resp.blob, 
-        image: resp.image_url,
-        encode: resp.encode,
-        active: resp.active,
-    }))
-    .catch(() => (dataServicesMock.length - 1 > id ? dataServicesMock[id] : dataServicesMock[0]))
+    const resp = await axios<RawDataService>(config(id))
+
+    const ds: DataService = {
+        id: resp.data.data_id, 
+        name: resp.data.data_name, 
+        blob: resp.data.blob, 
+        image: resp.data.image_url,
+        encode: resp.data.encode,
+        active: resp.data.active,
+    }
+
+    return ds
 };

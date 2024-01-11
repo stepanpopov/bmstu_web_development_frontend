@@ -1,20 +1,26 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { fetchDsByID, fetchDataListByName } from '../../api/dataService'
+import { fetchDataListByName, fetchAddToDraft } from '../../api/dataService'
 import DataService from '../../models/dataService';
+import { RootState } from '../types';
 
-export const filterDataListByName = createAsyncThunk<DataService[], string>(
-    'dataService/findByStatus', 
+export const filterDataListByName = createAsyncThunk<DataService[], string, { state: RootState } >(
+    'dataServices/filterDataListByName', 
     async (name) => {
         const dataList = await fetchDataListByName(name)
         return dataList
     }
 )
 
-export const getDsByID = createAsyncThunk<DataService, number>(
-    'dataService/findByStatus', 
+export const addToDraft = createAsyncThunk<number, number, { state: RootState } >(
+    'dataServices/addToDraft', 
     async (id) => {
-        const data = await fetchDsByID(id)
-        return data
+        const draftID = await fetchAddToDraft(id)
+        return draftID
     }
 )
+
+// TODO: 
+// убрать из стора dataService
+// можно вызывать диспатч в thunk ах
+// 

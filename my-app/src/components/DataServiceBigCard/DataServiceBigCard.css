@@ -4,13 +4,16 @@
     text-align: center;
     min-height: 100vh;
     border: 1px solid #71b961;
-    font-size: 300%;
+    font-size: 150%;
     font-weight: bold;
     margin: 3%;
     /*margin-top: 10%;*/
     margin-bottom: 10%;
 }
 
+.page_card_title {
+    font-size: 2rem;
+}
 
 .page_card h1 {
     color: rgb(0, 0, 0);

@@ -1,22 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import DataService from "../../models/dataService";
-import { getDsByID, filterDataListByName } from './thunks'
+import { filterDataListByName } from './thunks'
 import { dataServicesMock } from '../../consts'
 
-interface entities {
+export interface entities {
     [key: number]: DataService
 }
 
 interface state {
     ids: number[],
     entities: entities,
-    selected: number | null,
+    loading: boolean
 }
 
 const initialState: state = {
     ids: [],
     entities: {},
-    selected: null,
+    loading: true
 }
 
 const reduceToEntities = (dsList: DataService[]) => (
@@ -51,25 +51,22 @@ const slice = createSlice({
     },
     extraReducers: (builder) => {
       builder
-        /*.addCase(getDsByID.fulfilled, (state, action) => {
-            const ds = action.payload;
-            state.selected = ds.id
-        })
-        .addCase(getDsByID.rejected, (state, action) => {
-          const ds = action.payload;
-          //
-        }) ??*/
         .addCase(filterDataListByName.fulfilled, (state, action) => {
           const dsList = action.payload;
 
           state.entities = reduceToEntities(dsList)
+          state.loading = false;
         })
-        .addCase(filterDataListByName.rejected, (state) => {
-          
-          state.entities = reduceToEntities(dataServicesMock)
+        .addCase(filterDataListByName.rejected, (state, action) => {
+          const { arg } = action.meta
+          state.entities = reduceToEntities(dataServicesMock.filter((ds) => (ds.name.includes(arg))))
+          state.loading = false;
+        })
+        .addCase(filterDataListByName.pending, (state) => {
+          state.loading = true;
         })
     },
   });
 
 
-export const { actions: dataSericeActions, reducer: dataServiceReducer } = slice
+export const { actions: dataServiceListActions, reducer: dataServiceListReducer } = slice

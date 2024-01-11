@@ -19,7 +19,7 @@ const DataServiceCard = ({ds, onClick}: DataServiceCardProps) => {
         <Card className="card">
             { ds.active ?
             <Container>
-            <Card.Img src={ds.image} alt='' style={{width: '200px', height: '200px'}} onError={handlerImgError} />
+            <Card.Img src={ds.image} alt='' style={{width: '100%', height: '100%'}} onError={handlerImgError} />
                 <Card.ImgOverlay>
                     <Card.Body>
                         <div onClick={() => onClick(ds.id)}>

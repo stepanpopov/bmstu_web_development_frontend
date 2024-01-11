@@ -5,7 +5,7 @@ import DataService from "../../models/dataService.ts";
 import { Container, Spinner } from "react-bootstrap"
 
 import {useAppDispatch} from "../../store";
-import { dataSericeActions, useDataServices, filterDataListByName } from '../../store/dataServiceList/index.ts'
+import { dataServiceListActions, useDataServices, useLoading, filterDataListByName } from '../../store/dataServiceList/index.ts'
 
 
 import './DataServiceList.css'
@@ -17,6 +17,7 @@ interface DataServiceListProps {
 const DataServiceList = ({searchValue}: DataServiceListProps) => {
     const dispatch = useAppDispatch()
     const dataServices = useDataServices()
+    const loading = useLoading()
 
     const navigate = useNavigate()
 
@@ -26,12 +27,12 @@ const DataServiceList = ({searchValue}: DataServiceListProps) => {
 
     return (
         <Container className="cards">
-            {/* {loading && <div className="loadingBg"><Spinner animation="border"/></div>} */}
+            {loading && <div className="loadingBg"><Spinner animation="border"/></div>}
  
-            {dataServices.filter((ds) => (ds.active)).map((ds) => (
+            {!loading && dataServices.filter((ds) => (ds.active)).map((ds) => (
                 <DataServiceCard 
                     ds={ds}
-                    onClick={(id) => (navigate(`service/${id}`, {state: {ds: ds}}))}
+                    onClick={(id) => (navigate(`service/${id}`))}
                 />
             ))}
         </Container>

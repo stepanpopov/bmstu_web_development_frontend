@@ -19,7 +19,7 @@ const DataServiceBigCard = ({ds}: DataServiceBigCardProps) => {
             { ds.active ?
             <Container>
                 <div>
-                    <Card.Title className = 'page_card_title'>{ds.name}</Card.Title>
+                    <Card.Title className = 'page_card_title' style={{ fontSize: '3rem' }} >{ds.name}</Card.Title>
                     <div className = 'page_card_id'>  ID: {ds.id} </div>
                     <div className = 'page_blob' style={{ width: '100%' }}>{ds.blob}</div>
                     <div className = 'page_card_encode'> {ds.encode ? 'Данные зашифрованы' : 'Данные расшифрованы'} </div>
