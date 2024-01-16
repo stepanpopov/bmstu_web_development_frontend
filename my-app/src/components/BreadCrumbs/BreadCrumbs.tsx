@@ -15,6 +15,7 @@ const Breadcrumbs = ({ pages }: BreadcrumbsProps) => {
             pages.map((p: Page) => (
                 <Link to={p.link}
                     className={location.pathname === p.link ? "breadcrumb-active" : "breadcrumb-not-active"}
+                    key={p.link}
                 >
                     {p.title + '/'}
                 </Link>

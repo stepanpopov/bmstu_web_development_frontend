@@ -6,7 +6,7 @@ import axios from "axios";
 const config = (id: number) => ({
     method: "get",
     url: `${DOMAIN}/dataService/${id}`,
-    timeout: requestTime,  
+    timeout: requestTime * 3,  
 })
 
 export const fetchDsByID = async (id: number): Promise<DataService> => {

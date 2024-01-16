@@ -7,15 +7,17 @@ import { Col, Container, Row, Form, Button } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { login as loginThunk, useError, useLoading, useUser, userActions } from '../../store/user'
+import { login as loginThunk, register as registerThunk, useError, useLoading, useUser, userActions } from '../../store/user'
 import { Loader } from '../../components/Loader/Loader.tsx';
 
-interface LoginPageProps {
+import { isModeratorMock } from '../../consts.tsx'
+
+interface RegisterPageProps {
     setPage: SetPage
     mainPageLink: string
 }
 
-const LoginPage = ({ setPage, mainPageLink }: LoginPageProps) => {
+const RegisterPage = ({ setPage, mainPageLink }: RegisterPageProps) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     
@@ -26,9 +28,10 @@ const LoginPage = ({ setPage, mainPageLink }: LoginPageProps) => {
     const loading = useLoading()
     const user = useUser()
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         console.log('handle called')
-       dispatch(loginThunk({login, password}))
+        await dispatch(registerThunk( {login, password, isModerator: isModeratorMock} ))
+        dispatch(loginThunk({login, password}))
     };
 
     useEffect(() => {
@@ -59,7 +62,7 @@ const LoginPage = ({ setPage, mainPageLink }: LoginPageProps) => {
                 <Row className="justify-content-center">
                     <Col md={5}>
                         <div className="bg p-4 rounded">
-                            <h2 className="text-center mb-4">Авторизация</h2>
+                            <h2 className="text-center mb-4">Регистрация</h2>
                             <Form.Label className="font-weight-bold text-left">Логин</Form.Label>
                             <Form.Control
                                 onChange={(e) => setLogin(e.target.value)}
@@ -88,4 +91,4 @@ const LoginPage = ({ setPage, mainPageLink }: LoginPageProps) => {
     );
 };
 
-export default LoginPage;
+export default RegisterPage;

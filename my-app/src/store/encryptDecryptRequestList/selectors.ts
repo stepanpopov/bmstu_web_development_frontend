@@ -16,8 +16,8 @@ const dsListByIDs = (state: RootState, ids: Set<number>): DataService[] => {
     return dsList
 }
 
-export const useOtherReqList= () => useSelector((state: RootState) => 
-    (Object.entries(state.enqDeqReqList.otherReqs).map(([_, req]) => req))
+export const useOtherReqList= (): EncryptDecryptRequest[]  => useSelector((state: RootState) => 
+    (Object.entries(state.enqDeqReqList.otherReqs).map(([_, req]) => req.req))
 )
 
 export const useReqListWithoutDraft= () => useSelector((state: RootState) => 
@@ -51,6 +51,25 @@ export const useReqWithDSByID = (id: number) => useSelector((state: RootState) =
     return [req.req, dsList]
 })
 
+export const useReqsDSListByID = (id: number) => useSelector((state: RootState) => {
+    let req: Req | undefined = state.enqDeqReqList.otherReqs[id]
+    if (!req && state.enqDeqReqList.draft) {
+        req = (
+            state.enqDeqReqList.draft.req.id === id ? 
+                    state.enqDeqReqList.draft : 
+                    undefined
+        );
+    }
+
+    if (!req) {
+        return []
+    }
+
+    const dsList: DataService[] = dsListByIDs(state, req.reqDs)
+
+    return dsList
+})
+
 export const useDraftWithDS = () => useSelector((state: RootState) => {
     const draft = state.enqDeqReqList.draft;
 
@@ -60,6 +79,10 @@ export const useDraftWithDS = () => useSelector((state: RootState) => {
 
     return [draft.req, dsListByIDs(state, draft.reqDs)]
 })
+
+export const useDraft = () => useSelector((state: RootState) => (
+    state.enqDeqReqList.draft?.req
+))
 
 export const useLoading = () => useSelector((state: RootState) => (state.enqDeqReqList.loading))
 

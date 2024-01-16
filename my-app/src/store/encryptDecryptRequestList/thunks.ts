@@ -1,25 +1,21 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { fetchFilterReqs, fetchReqByID, fetchFormDraft } from '../../api/encryptDecryptRequest'
+import { fetchFilterReqs, FilterReqArgs, fetchReqByID, fetchFormDraft } from '../../api/encryptDecryptRequest'
 import { fetchDeleteFromDraft } from '../../api/dataService'
+
+export { type FilterReqArgs } from '../../api/encryptDecryptRequest'
 
 import EncryptDecryptRequst from '../../models/encryptDecryptRequest';
 import DataService from '../../models/dataService';
 import { RootState } from '../types';
 
-export interface FilterReqArgs {
-    status: string
-    startDate: string
-    endDate: string
-}
-
 export const filterReqs = createAsyncThunk<EncryptDecryptRequst[], FilterReqArgs>(
     'encryptDecryptRequestList/filterReqListByName',
     async (args) => {
-        const reqList = await fetchFilterReqs(args.status, args.startDate, args.endDate)
+        const reqList = await fetchFilterReqs({status: args.status, startDate: args.startDate, endDate: args.endDate})
         return reqList
     }
-)
+);
 
 export const getReqByID = createAsyncThunk<[EncryptDecryptRequst, DataService[]], number>(
     'encryptDecryptRequestList/getReqByID',

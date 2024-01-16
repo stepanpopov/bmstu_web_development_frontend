@@ -1,8 +1,12 @@
 import './Footer.css'
 
-const Footer = () => (
+interface Props {
+    text: string
+}
+
+const Footer = ({text}: Props) => (
     <footer>
-        <p>2023 ШИФРОВАННЯ/ДЕШИФРОВАННЯ ДЛЯ БУДЬ-КОГО СВІТУ 2023</p>
+        <p>{text}</p>
     </footer>
 )
 

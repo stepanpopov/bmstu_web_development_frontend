@@ -25,7 +25,9 @@ const slice = createSlice({
         state.id = data.id
         state.ds = data
       },
-
+      setLoading(state) {
+        state.loading = true
+      }
     },
     extraReducers: (builder) => {
       builder

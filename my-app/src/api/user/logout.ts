@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 const config = (token: string) => ({
-    method: "post",
+    method: "get",
     url: `${DOMAIN}/auth/logout`,
     headers: {
         Authorization: `Bearer ${token}`,

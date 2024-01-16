@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import DataServiceCard from "../DataServiceCard/DataServiceCard.tsx";
+import { Loader } from '../Loader/Loader.tsx'
 import DataService from "../../models/dataService.ts";
 import { Container, Spinner } from "react-bootstrap"
 
 import {useAppDispatch} from "../../store";
-import { dataServiceListActions, useDataServices, useLoading, filterDataListByName } from '../../store/dataServiceList/index.ts'
+import { dataServiceListActions, useDataServices, useLoading, filterDataListByName } from '../../store/dataServiceList'
 
 
 import './DataServiceList.css'
@@ -25,14 +26,18 @@ const DataServiceList = ({searchValue}: DataServiceListProps) => {
         dispatch(filterDataListByName(searchValue))
     }, [searchValue])
 
+    if (loading) {
+        return <Loader />
+    }
+
     return (
         <Container className="cards">
-            {loading && <div className="loadingBg"><Spinner animation="border"/></div>}
- 
-            {!loading && dataServices.filter((ds) => (ds.active)).map((ds) => (
+            {dataServices.filter((ds) => (ds.active)).map((ds) => (
                 <DataServiceCard 
                     ds={ds}
-                    onClick={(id) => (navigate(`service/${id}`))}
+                    onClick={(id) => (navigate(`service/${id}`, {state: {title: ds.name}}))}
+                    draftButtonExists
+                    key={ds.id}
                 />
             ))}
         </Container>

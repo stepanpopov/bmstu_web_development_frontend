@@ -1,6 +1,6 @@
 import {useLocation, useParams} from 'react-router-dom';
 import { Container} from 'react-bootstrap';
-import Spinner from 'react-bootstrap/Spinner'
+import { Loader } from '../../components/Loader/Loader.tsx'
 import DataService from "../../models/dataService";
 import { useEffect, useState } from 'react';
 import { mainPage, navTitle } from '../../consts.tsx';
@@ -25,27 +25,24 @@ const DataServicePage = ({ setPage }: Props) => {
 
     console.log(id)
 
+    useEffect(() => {
+        dispatch(dataServiceActions.setLoading())
+        dispatch(getDsByID(id == undefined ? 0 : +id))
+    }, [id])
+
     const dataService = useDataService()
     const loading = useLoading()
 
     useEffect(() => {
-        dispatch(getDsByID(id == undefined ? 0 : +id))
-    }, [id])
-
-    useEffect(() => {
         if (!loading) {
-            setPage(location.pathname, dataService!.name)
+            setPage(location.pathname, location.state.title)
         }
     }, [loading])
 
-    console.log(loading)
-    console.log(dataService)
-
     return (
         <Container>
-            {loading && <Spinner animation="border" variant="success" />}
+            {loading && <Loader />}
             {!loading && <DataServiceBigCard ds={dataService!}></DataServiceBigCard>}
-            <Footer />
         </Container>
     );
 };

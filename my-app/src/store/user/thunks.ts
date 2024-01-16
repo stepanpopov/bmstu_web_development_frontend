@@ -17,8 +17,10 @@ export interface Register extends Login {
 export const login = createAsyncThunk<string, Login, { state: RootState }>(
     'user/login', 
     async (args, { dispatch }) => {
+    
        const resp =  await fetchLogin(args.login, args.password)
        Cookies.set(JWT_TOKEN_COOKIE, resp)
+       console.log("before dispatch")
        dispatch(userActions.setUser({login: args.login, role: "user"}))
        return resp
     }

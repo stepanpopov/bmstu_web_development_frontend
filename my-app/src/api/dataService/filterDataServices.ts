@@ -11,7 +11,7 @@ interface RawFilteringResponse {
 const config = (search: string) => ({
     method: "get",
     url: `${DOMAIN}/dataService/?dataname=${search}`,
-    timeout: requestTime,  
+    timeout: requestTime * 3,  
 })
 
 export const fetchDataListByName = async (search: string): Promise<DataService[]> => {

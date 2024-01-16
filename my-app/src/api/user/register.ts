@@ -3,7 +3,7 @@ import axios from "axios";
 
 const config = (login: string, password: string, is_moderator: boolean) => ({
     method: "post",
-    url: `${DOMAIN}/auth/logout`,
+    url: `${DOMAIN}/auth/register`,
     data: {
         login,
         password,

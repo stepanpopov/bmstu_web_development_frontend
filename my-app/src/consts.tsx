@@ -20,7 +20,13 @@ export const dataServicesMock: DataService[] = [
 ]
 
 export const mainPage: Page = {link: '/', title: 'Данные для шифрования'}
+export const loginPage: Page = {link: '/login', title: 'Войти'}
+export const registerPage: Page = {link: '/register', title: 'Регистрация'}
+export const requestsPage: Page = {link: '/requests', title: 'Запросы на шифрование'}
 
 export const navTitle = 'ШИФРОВАНИЕ КОДОМ ДЛЯ КОРРЕКЦИИ ОШИБОК';
+export const footerTitle = '2023 ШИФРОВАННЯ/ДЕШИФРОВАННЯ ДЛЯ БУДЬ-КОГО СВІТУ 2023'
 
 export const JWT_TOKEN_COOKIE = 'jwtToken';
+
+export const isModeratorMock = false;

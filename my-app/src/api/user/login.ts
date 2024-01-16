@@ -19,5 +19,6 @@ const config = (login: string, password: string) => ({
 
 export const fetchLogin = async (login: string, password: string): Promise<string> => {
     const resp = await axios<RawResponse>(config(login, password))
+    console.log(resp)
     return resp.data.access_token
 }

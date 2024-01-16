@@ -5,7 +5,6 @@ import { mainPage, navTitle } from '../../consts.tsx';
 import Navbar from '../../components/Navbar/Navbar.tsx'
 import InputFilter from '../../components/InputFilter/InputFilter.tsx';
 import { useEffect, useState } from 'react';
-import Footer from '../../components/Footer/Footer.tsx';
 import { SetPage } from "../../models/common.ts";
 
 interface Props {
@@ -15,7 +14,7 @@ interface Props {
 const DataServiceListPage = ({setPage}: Props) => {
     useEffect(() => {
         setPage()
-    })
+    }, [])
     
     const [searchValue, setSearchValue] = useState('')
 
@@ -25,7 +24,6 @@ const DataServiceListPage = ({setPage}: Props) => {
                 <InputFilter searchValue={searchValue} setSearchValue={setSearchValue} />
                 <DataServiceList searchValue={searchValue} />
             </Container>
-            <Footer />
         </Container>
     );
 };

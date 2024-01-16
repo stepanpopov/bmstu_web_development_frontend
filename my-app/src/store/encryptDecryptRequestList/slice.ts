@@ -90,6 +90,9 @@ const slice = createSlice({
     initialState,
     reducers: {
       setReqs,
+      resetError(state) {
+        state.error = null
+      },
     },
     extraReducers: (builder) => {
       builder
