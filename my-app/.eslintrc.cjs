@@ -8,11 +8,13 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', "unused-imports", 'react'],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
     ],
+    'unused-imports/no-unused-imports-ts': 'warn',
+    "react/jsx-indent": [2, 4, { checkAttributes: true, indentLogicalExpressions: true }],
   },
 }

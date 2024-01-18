@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import User from "../../models/user";
 import { login, register, logout, checkAuth } from './thunks'
-import Cookies from "js-cookie";
-import { JWT_TOKEN_COOKIE } from '../../consts'
 
 interface State {
     user: User | null

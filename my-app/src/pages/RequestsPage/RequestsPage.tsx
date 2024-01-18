@@ -1,20 +1,14 @@
-import {useLocation, useParams} from 'react-router-dom';
 import { Container} from 'react-bootstrap';
-import Spinner from 'react-bootstrap/Spinner'
-import DataService from "../../models/dataService";
-import { useEffect, useState } from 'react';
-import { mainPage, navTitle } from '../../consts.tsx';
-import Navbar from '../../components/Navbar/Navbar.tsx'
-import Footer from '../../components/Footer/Footer.tsx';
+import { useEffect } from 'react';
 import RequestCard from '../../components/RequestCard/RequestCard.tsx';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { Page, SetPage, SetPageTitleLink } from '../../models/common.ts';
+import { SetPage } from '../../models/common.ts';
 
 import {useAppDispatch} from "../../store";
-import { enqDeqReqListActions, useLoadingFilterReqs, useError, useReqsDSListByID, useDraft, filterReqs, useOtherReqList } from '../../store/encryptDecryptRequestList'
+import { enqDeqReqListActions, useLoadingFilterReqs, useError, useDraft, filterReqs, useOtherReqList } from '../../store/encryptDecryptRequestList'
 import { Loader } from '../../components/Loader/Loader.tsx';
 
 interface Props {

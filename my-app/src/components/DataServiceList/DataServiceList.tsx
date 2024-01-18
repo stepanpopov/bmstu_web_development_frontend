@@ -1,12 +1,11 @@
-import {useEffect, useState} from "react";
-import {useNavigate} from 'react-router-dom';
+import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import DataServiceCard from "../DataServiceCard/DataServiceCard.tsx";
 import { Loader } from '../Loader/Loader.tsx'
-import DataService from "../../models/dataService.ts";
-import { Container, Spinner } from "react-bootstrap"
+import { Container } from "react-bootstrap"
 
-import {useAppDispatch} from "../../store";
-import { dataServiceListActions, useDataServices, useLoading, filterDataListByName } from '../../store/dataServiceList'
+import { useAppDispatch } from "../../store";
+import { useDataServices, useLoading, filterDataListByName } from '../../store/dataServiceList'
 
 
 import './DataServiceList.css'
@@ -15,7 +14,7 @@ interface DataServiceListProps {
     searchValue: string;
 }
 
-const DataServiceList = ({searchValue}: DataServiceListProps) => {
+const DataServiceList = ({ searchValue }: DataServiceListProps) => {
     const dispatch = useAppDispatch()
     const dataServices = useDataServices()
     const loading = useLoading()
@@ -24,7 +23,7 @@ const DataServiceList = ({searchValue}: DataServiceListProps) => {
 
     useEffect(() => {
         dispatch(filterDataListByName(searchValue))
-    }, [searchValue])
+    }, [searchValue, dispatch])
 
     if (loading) {
         return <Loader />
@@ -33,9 +32,9 @@ const DataServiceList = ({searchValue}: DataServiceListProps) => {
     return (
         <Container className="cards">
             {dataServices.filter((ds) => (ds.active)).map((ds) => (
-                <DataServiceCard 
+                <DataServiceCard
                     ds={ds}
-                    onClick={(id) => (navigate(`service/${id}`, {state: {title: ds.name}}))}
+                    onClick={(id) => (navigate(`service/${id}`, { state: { title: ds.name } }))}
                     draftButtonExists
                     key={ds.id}
                 />

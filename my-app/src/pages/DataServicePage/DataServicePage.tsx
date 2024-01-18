@@ -1,16 +1,12 @@
-import {useLocation, useParams} from 'react-router-dom';
-import { Container} from 'react-bootstrap';
+import { useLocation, useParams } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
 import { Loader } from '../../components/Loader/Loader.tsx'
-import DataService from "../../models/dataService";
-import { useEffect, useState } from 'react';
-import { mainPage, navTitle } from '../../consts.tsx';
-import Navbar from '../../components/Navbar/Navbar.tsx'
-import Footer from '../../components/Footer/Footer.tsx';
+import { useEffect } from 'react';
 import DataServiceBigCard from '../../components/DataServiceBigCard/DataServiceBigCard.tsx';
 
-import {useAppDispatch} from "../../store";
+import { useAppDispatch } from "../../store";
 import { dataServiceActions, useDataService, useLoading, getDsByID } from '../../store/dataService/index.ts'
-import { Page, SetPage, SetPageTitleLink } from '../../models/common.ts';
+import { SetPageTitleLink } from '../../models/common.ts';
 
 interface Props {
     setPage: SetPageTitleLink
@@ -19,7 +15,7 @@ interface Props {
 const DataServicePage = ({ setPage }: Props) => {
     const location = useLocation()
 
-    const {id} = useParams()
+    const { id } = useParams()
     // handle not convertable id
     const dispatch = useAppDispatch()
 
