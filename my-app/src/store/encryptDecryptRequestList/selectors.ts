@@ -3,12 +3,13 @@ import { RootState } from "../types";
 import EncryptDecryptRequest from "../../models/encryptDecryptRequest";
 import {Req} from "./slice"
 import DataService from "../../models/dataService";
+import { memoize } from 'proxy-memoize';
 
-const dsListByIDs = (state: RootState, ids: Set<number>): DataService[] => {
+const dsListByIDs = (state: RootState, ids: number[]): DataService[] => {
     const dsList: DataService[] = []
 
     state.enqDeqReqList.dsList.forEach((ds) => {
-        if (ids.has(ds.id)) {
+        if (ids.includes(ds.id)) {
             dsList.push(ds)
         }
     })
@@ -16,42 +17,34 @@ const dsListByIDs = (state: RootState, ids: Set<number>): DataService[] => {
     return dsList
 }
 
-export const useOtherReqList= (): EncryptDecryptRequest[]  => useSelector((state: RootState) => 
-    (Object.entries(state.enqDeqReqList.otherReqs).map(([_, req]) => req.req))
-)
-
-export const useReqListWithoutDraft= () => useSelector((state: RootState) => 
-    (
-        Object.entries(state.enqDeqReqList.otherReqs)
-        .map(([_, req]) => req)
-        .filter((req: EncryptDecryptRequest) => (req.status != "draft"))
-    )
+export const useOtherReqList= (): EncryptDecryptRequest[]  => useSelector(memoize(( { enqDeqReqList: {otherReqs}}: RootState ) => 
+    (Object.entries(otherReqs).map(([_, req]) => req.req)))
 )
 
 export const useError = () => useSelector((state: RootState) => 
     (state.enqDeqReqList.error)
 )
 
-export const useReqWithDSByID = (id: number) => useSelector((state: RootState) => {
-    let req: Req | undefined = state.enqDeqReqList.otherReqs[id]
+export const useReqWithDSByID = (id: number) => useSelector(memoize((state: RootState) => {
+    let req: Req | null = state.enqDeqReqList.otherReqs[id]
     if (!req && state.enqDeqReqList.draft) {
         req = (
             state.enqDeqReqList.draft.req.id === id ? 
                     state.enqDeqReqList.draft : 
-                    undefined
+                    null
         );
     }
 
     if (!req) {
-        return [undefined, []]
+        return {request: null, dsList: []}
+        // return [null, []]
     }
 
-    const dsList = dsListByIDs(state, req.reqDs)
+    return {request: req.req, dsList: dsListByIDs(state, req.reqDs)}
+    // return [req.req, dsListByIDs(state, req.reqDs)]
+}))
 
-    return [req.req, dsList]
-})
-
-export const useReqsDSListByID = (id: number) => useSelector((state: RootState) => {
+export const useReqsDSListByID = (id: number) => useSelector(memoize((state: RootState) => {
     let req: Req | undefined = state.enqDeqReqList.otherReqs[id]
     if (!req && state.enqDeqReqList.draft) {
         req = (
@@ -65,10 +58,8 @@ export const useReqsDSListByID = (id: number) => useSelector((state: RootState) 
         return []
     }
 
-    const dsList: DataService[] = dsListByIDs(state, req.reqDs)
-
-    return dsList
-})
+    return dsListByIDs(state, req.reqDs)
+}))
 
 export const useDraftWithDS = () => useSelector((state: RootState) => {
     const draft = state.enqDeqReqList.draft;
@@ -80,11 +71,16 @@ export const useDraftWithDS = () => useSelector((state: RootState) => {
     return [draft.req, dsListByIDs(state, draft.reqDs)]
 })
 
-export const useDraft = () => useSelector((state: RootState) => (
-    state.enqDeqReqList.draft?.req
-))
+export const useDraft = () => useSelector(memoize(({ enqDeqReqList: {draft}}: RootState) => (
+    draft?.req
+)))
+
+export const useLoadingFilterReqs = () => useSelector((state: RootState) => (state.enqDeqReqList.loadingFilterReqs))
 
 export const useLoading = () => useSelector((state: RootState) => (state.enqDeqReqList.loading))
 
 export const useDraftActive = () => 
     useSelector((state: RootState) => state.enqDeqReqList.draftID !== null)
+
+export const useRequestsActive = () => 
+    useSelector((state:RootState) => state.enqDeqReqList.draftID || Object.entries(state.enqDeqReqList.otherReqs).length !== 0)

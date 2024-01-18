@@ -28,5 +28,9 @@ export const navTitle = 'ШИФРОВАНИЕ КОДОМ ДЛЯ КОРРЕКЦИ
 export const footerTitle = '2023 ШИФРОВАННЯ/ДЕШИФРОВАННЯ ДЛЯ БУДЬ-КОГО СВІТУ 2023'
 
 export const JWT_TOKEN_COOKIE = 'jwtToken';
+export const USERNAME_COOKIE = 'user_name';
+export const USER_ROLE_COOKIE = 'user_role';
 
 export const isModeratorMock = false;
+
+export const userRoleMock = 'user';

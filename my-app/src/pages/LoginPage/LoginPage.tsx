@@ -24,6 +24,8 @@ const LoginPage = ({ setPage, mainPageLink }: LoginPageProps) => {
 
     const error = useError()
     const loading = useLoading()
+    console.log(loading)
+
     const user = useUser()
 
     const handleSubmit = () => {

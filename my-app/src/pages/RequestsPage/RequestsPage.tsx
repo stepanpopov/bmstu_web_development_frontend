@@ -14,7 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Page, SetPage, SetPageTitleLink } from '../../models/common.ts';
 
 import {useAppDispatch} from "../../store";
-import { enqDeqReqListActions, useLoading, useError, useReqsDSListByID, useDraft, filterReqs, useOtherReqList } from '../../store/encryptDecryptRequestList'
+import { enqDeqReqListActions, useLoadingFilterReqs, useError, useReqsDSListByID, useDraft, filterReqs, useOtherReqList } from '../../store/encryptDecryptRequestList'
 import { Loader } from '../../components/Loader/Loader.tsx';
 
 interface Props {
@@ -28,31 +28,37 @@ const RequestsPage = ({ setPage }: Props) => {
     useEffect(() => {
         setPage()
         dispatch(filterReqs({}))
+        console.log('filterReqs called')
     }, [])
 
     const draftReq = useDraft()
     const otherReqs = useOtherReqList()
-    const loading = useLoading()
+    const loading = useLoadingFilterReqs()
     const error = useError()
 
+   
+
     useEffect(() => {
+        console.log('error:', error)
         if (error) {
             toast.warn(error)
             dispatch(enqDeqReqListActions.resetError())
         }
     }, [error] )
 
+    console.log('rendering requests page loader')
     if (loading) {
         return <Loader/>
     }
 
+    console.log('rendering requests page')
     return (
         <Container>
             <ToastContainer position="top-center" newestOnTop={false} />
-            { draftReq && <RequestCard key={draftReq.id} request={draftReq} /> }
+            { draftReq && <RequestCard key={draftReq.id} requestID={draftReq.id} /> }
             {
                 otherReqs.map((req) => (
-                    <RequestCard key={req.id} request={req} />
+                    <RequestCard key={req.id} requestID={req.id} />
                 ))
             }
         </Container>

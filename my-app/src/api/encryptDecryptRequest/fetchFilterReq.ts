@@ -56,13 +56,15 @@ export const fetchFilterReqs = async ({status, startDate, endDate} : FilterReqAr
     endDate = endDate ?? ""
 
     const resp = await axios<RawResponse>(config(accessToken, status, startDate, endDate))
-    return resp.data.map((r: RawEncryptDecryptRequst) => ({
-        id: r.requestID,
-        status: getStatusFromNumber(r.status),
-        creationDate: r.creationDate,
-        finishDate: (r.finishDate === null ? undefined : r.finishDate),
-        formDate: (r.formDate === null ? undefined : r.formDate),
-        moderator: (r.moderator === null ? undefined : r.moderator),
-        creator: (r.creator === null ? undefined : r.creator),
+    const req: EncryptDecryptRequest[] = resp.data.map((r: RawEncryptDecryptRequst) => ({
+        id: r.RequestID,
+        status: getStatusFromNumber(r.Status),
+        creationDate: new Date(r.CreationDate).getTime(),
+        finishDate: (r.FinishDate === null ? undefined : new Date(r.FinishDate).getTime()),
+        formDate: (r.FormDate === null ? undefined : new Date(r.FormDate).getTime()),
+        moderator: (r.Moderator === null ? undefined : r.Moderator),
+        creator: (r.Creator === null ? undefined : r.Creator),
     }))
+    console.log('got req: ', req)
+    return req
 }

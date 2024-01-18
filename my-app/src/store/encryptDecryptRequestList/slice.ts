@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import EncDeqRequest from "../../models/encryptDecryptRequest";
+import EncDeqRequest, { Status } from "../../models/encryptDecryptRequest";
 import { filterReqs, getReqByID, getDraft, removeFromDraft, formDraft } from './thunks'
 import DataService from "../../models/dataService";
 
@@ -7,7 +7,7 @@ import { addToDraft } from "../dataServiceList"
 
 export interface Req {
   req: EncDeqRequest,
-  reqDs: Set<number>,
+  reqDs: number[],
 }
 
 interface Reqs {
@@ -15,11 +15,12 @@ interface Reqs {
 }
 
 interface State {
-    dsList: Set<DataService>,
+    dsList: DataService[],
     otherReqs: Reqs,
     draftID: number | null,
     draft: Req | null 
     loading: boolean
+    loadingFilterReqs: boolean
     error: string | null
 }
 
@@ -27,8 +28,9 @@ const initialState: State = {
     draftID: null,
     draft: null,
     otherReqs: {},
-    dsList: new Set,
+    dsList: [],
     loading: true,
+    loadingFilterReqs: true,
     error: null
 }
 
@@ -36,53 +38,71 @@ const setReqs = (state: State, action: PayloadAction<EncDeqRequest[]>) => {
   const reqList = action.payload;
   state.otherReqs = reqList.reduce((reqs: Reqs, req) => {
     if (req.status === "draft" && state.draft) {
+      state.draft.req = req
+      state.draftID = req.id
       return reqs
     }
     if (req.status === "draft" && !state.draft) {
       state.draft = {
         req: req,
-        reqDs: new Set<number>,
+        reqDs: [],
       }
+      state.draftID = req.id
       return reqs
     }
-    reqs[req.id].req = req
+
+    reqs[req.id] = {
+      req: req,
+      reqDs: [],
+    }
+
     return reqs
   }, {})
-  state.loading = false
+  state.loadingFilterReqs = false
   state.error = null
 }
 
 const setReq = (state: State, request: EncDeqRequest) => {
   if (request.status === "draft" && state.draft) {
-    state.draft!.req = request
+    state.draft.req = request
+    state.draftID = request.id
+    return
   }
   if (request.status === "draft" && !state.draft) {
     state.draft = {
       req: request,
-      reqDs: new Set,
+      reqDs: [],
     }
+    state.draftID = request.id
     return
   }
   
   state.otherReqs[request.id].req = request
 }
 
-const setDSListForReq = (state: State, dsList: DataService[], request: EncDeqRequest) => {
-  const dsNumbers = new Set(dsList.map((ds) => ds.id))
-  dsList.forEach((ds) => {
-    state.dsList.add(ds)
-  })
+const setDSNumbersforReq = (state: State, dsList: DataService[], requestID: number, status: Status) => {
 
-  if (request.status === "draft") {
-    state.draft = {
-      req: request,
-      reqDs: dsNumbers
-    }
+  // const dsListCurSet = new Set(state.dsList)
+  const dsListCurMap = state.dsList.reduce((curMap, ds: DataService) => {
+    curMap.set(ds.id, ds)
+    return curMap
+  }, new Map<number, DataService>());
+
+  dsList.forEach((ds) => {
+    dsListCurMap.set(ds.id, ds)
+  })
+  
+  state.dsList = Array.from(dsListCurMap.values())
+  console.log('state.dsList', state.dsList)
+
+  const dsListNumbers = Array.from(new Set(dsList.map((ds) => ds.id)))
+
+  if (status === "draft" && state.draft) {
+    state.draft.reqDs = dsListNumbers
     return
   }
 
-  state.otherReqs[request.id].req = request
-  state.otherReqs[request.id].reqDs = dsNumbers
+  state.otherReqs[requestID].reqDs = dsListNumbers
 }
 
 const slice = createSlice({
@@ -93,23 +113,27 @@ const slice = createSlice({
       resetError(state) {
         state.error = null
       },
+      setLoading(state, action: PayloadAction<boolean>) {
+        console.log("in set loading")
+        state.loading = action.payload
+      },
     },
     extraReducers: (builder) => {
       builder
         .addCase(filterReqs.fulfilled, setReqs)
         .addCase(filterReqs.rejected, (state, action) => {
           state.error = action.error.message ?? "Не удалось выполнить запрос"
-          state.loading = false;
+          state.loadingFilterReqs = false;
         })
         .addCase(filterReqs.pending, (state) => {
-          state.loading = true;
+          state.loadingFilterReqs = true;
         })
         .addCase(getReqByID.fulfilled, (state, action) => {
           const req = action.payload[0]
           const dsList = action.payload[1]
-
+          
           setReq(state, req)
-          setDSListForReq(state, dsList, req)
+          setDSNumbersforReq(state, dsList, req.id, req.status)
 
           state.loading = false;
           state.error = null
@@ -126,7 +150,7 @@ const slice = createSlice({
           const dsList = action.payload[1]
 
           setReq(state, req)
-          setDSListForReq(state, dsList, req)
+          setDSNumbersforReq(state, dsList, req.id, req.status)
 
           state.loading = false;
           state.error = null
@@ -143,7 +167,9 @@ const slice = createSlice({
           state.loading = false;
         })
         .addCase(removeFromDraft.fulfilled, (state, action) => {
-          state.draft?.reqDs.delete(action.meta.arg)
+          if (state.draft) {
+            state.draft.reqDs = state.draft.reqDs.filter((id) => id !== action.meta.arg)
+          }
           state.loading = false;
         })
         .addCase(removeFromDraft.pending, (state) => {
@@ -155,6 +181,7 @@ const slice = createSlice({
         })
         .addCase(formDraft.fulfilled, (state) => {
           state.draftID, state.draft = null, null
+          state.loading = false;
         })
         .addCase(formDraft.pending, (state) => {
           state.loading = true;

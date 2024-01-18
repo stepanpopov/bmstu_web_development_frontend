@@ -8,11 +8,11 @@ export interface RawDataService {
 }
 
 export interface RawEncryptDecryptRequst {
-    requestID:      number
-    status:         number // "draft" | "deleted" | "formed" | "finished" | "reqjected"
-    creationDate:   Date
-    finishDate:     Date | null
-    formDate:       Date | null
-    moderator:      string | null
-    creator:        string | null
+    RequestID:      number
+    Status:         number // "draft" | "deleted" | "formed" | "finished" | "reqjected"
+    CreationDate:   string
+    FinishDate:     string | null
+    FormDate:       string | null
+    Moderator:      string | null
+    Creator:        string | null
 }

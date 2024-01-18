@@ -6,9 +6,10 @@ import { useUser } from '../../store/user'
 import {useAppDispatch} from "../../store";
 import { logout } from '../../store/user'
 
-import { useDraftActive } from '../../store/encryptDecryptRequestList'
+import { filterReqs, useRequestsActive } from '../../store/encryptDecryptRequestList'
 
 import './Navbar.css'
+import { useEffect } from 'react';
 
 interface NavbarProps {
   title: string,
@@ -24,7 +25,13 @@ const MyNavbar = ({title, mainPageLink, loginPageLink, registerPageLink, request
   const dispatch = useAppDispatch()
   const user = useUser()
 
-  const draftActive = useDraftActive()
+  useEffect(() => {
+    dispatch(filterReqs({}))
+    console.log('filterReqs in navbar called')
+  }, [])
+  // const draftActive = useDraftActive()
+  const reqsActive = useRequestsActive()
+
 
   const logoutHandler = () => {
     dispatch(logout())
@@ -52,7 +59,7 @@ const MyNavbar = ({title, mainPageLink, loginPageLink, registerPageLink, request
                 </Link>
             </Col>
             <Col lg="5">
-                  <Button variant="outline-warning" onClick={requestsHandler} disabled={!draftActive} >Шифрование кодом Хэмминга</Button> 
+                  <Button variant="outline-warning" onClick={requestsHandler} disabled={!reqsActive && !user} >Шифрование кодом Хэмминга</Button> 
             </Col> 
             { user ? 
               <>

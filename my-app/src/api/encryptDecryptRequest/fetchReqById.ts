@@ -34,14 +34,15 @@ export const fetchReqByID = async (id: number): Promise<[EncryptDecryptRequest, 
 
     const r = resp.data.encDecReq
     const req: EncryptDecryptRequest = {
-        id: r.requestID,
-        status: getStatusFromNumber(r.status),
-        creationDate: r.creationDate,
-        finishDate: (r.finishDate === null ? undefined : r.finishDate),
-        formDate: (r.formDate === null ? undefined : r.formDate),
-        moderator: (r.moderator === null ? undefined : r.moderator),
-        creator: (r.creator === null ? undefined : r.creator),
+        id: r.RequestID,
+        status: getStatusFromNumber(r.Status),
+        creationDate: new Date(r.CreationDate).getTime(),
+        finishDate: (r.FinishDate === null ? undefined : new Date(r.FinishDate).getTime()),
+        formDate: (r.FormDate === null ? undefined : new Date(r.FormDate).getTime()),
+        moderator: (r.Moderator === null ? undefined : r.Moderator),
+        creator: (r.Creator === null ? undefined : r.Creator),
     }
+    console.log('got req: ', req)
 
     return [req, dsList]
 }

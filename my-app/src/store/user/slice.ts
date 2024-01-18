@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import User from "../../models/user";
-import { login, register, logout } from './thunks'
+import { login, register, logout, checkAuth } from './thunks'
 import Cookies from "js-cookie";
 import { JWT_TOKEN_COOKIE } from '../../consts'
 
@@ -21,11 +21,13 @@ const slice = createSlice({
     initialState,
     reducers: {
         setUser(state, action: PayloadAction<User>) {
+            console.log("in set user")
             console.log(action.payload)
             state.user = action.payload
             state.loading = false
         },
         setLoading(state, action: PayloadAction<boolean>) {
+            console.log("in set loading")
             state.loading = action.payload
         },
         removeUser(state) {
@@ -61,6 +63,13 @@ const slice = createSlice({
         .addCase(logout.rejected, (state, action) => {
             state.error = action.error.message ?? "Не удалось выполнить запрос"
             state.loading = false
+        })
+        .addCase(checkAuth.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(checkAuth.rejected, (state, action) => {
+            state.error = action.error.message ?? "Не удалось выполнить запрос"
+            state.loading = false;
         })
     },
   });
