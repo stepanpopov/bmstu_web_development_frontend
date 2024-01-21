@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import EncDeqRequest, { Status } from "../../models/encryptDecryptRequest";
-import { filterReqs, getReqByID, getDraft, removeFromDraft, formDraft } from './thunks'
+import { filterReqs, getReqByID, getDraft, removeFromDraft, formDraft, FilterReqArgs } from './thunks'
 import DataService from "../../models/dataService";
-
+import { filterDataListByName } from "../dataServiceList/thunks"
 import { addToDraft } from "../dataServiceList"
 
 export interface Req {
@@ -14,24 +14,28 @@ interface Reqs {
   [key: number]: Req
 }
 
+
 interface State {
-    dsList: DataService[],
-    otherReqs: Reqs,
-    draftID: number | null,
-    draft: Req | null 
-    loading: boolean
-    loadingFilterReqs: boolean
-    error: string | null
+  dsList: DataService[],
+  otherReqs: Reqs,
+  draftID: number | null,
+  draft: Req | null
+  loading: boolean
+  loadingFilterReqs: boolean
+  error: string | null
+
+  filter: FilterReqArgs
 }
 
 const initialState: State = {
-    draftID: null,
-    draft: null,
-    otherReqs: {},
-    dsList: [],
-    loading: true,
-    loadingFilterReqs: true,
-    error: null
+  draftID: null,
+  draft: null,
+  otherReqs: {},
+  dsList: [],
+  loading: true,
+  loadingFilterReqs: true,
+  error: null,
+  filter: {},
 }
 
 const setReqs = (state: State, action: PayloadAction<EncDeqRequest[]>) => {
@@ -76,7 +80,7 @@ const setReq = (state: State, request: EncDeqRequest) => {
     state.draftID = request.id
     return
   }
-  
+
   state.otherReqs[request.id].req = request
 }
 
@@ -91,9 +95,9 @@ const setDSNumbersforReq = (state: State, dsList: DataService[], requestID: numb
   dsList.forEach((ds) => {
     dsListCurMap.set(ds.id, ds)
   })
-  
+
   state.dsList = Array.from(dsListCurMap.values())
-  console.log('state.dsList', state.dsList)
+
 
   const dsListNumbers = Array.from(new Set(dsList.map((ds) => ds.id)))
 
@@ -106,92 +110,102 @@ const setDSNumbersforReq = (state: State, dsList: DataService[], requestID: numb
 }
 
 const slice = createSlice({
-    name: 'enqDeqReqList',
-    initialState,
-    reducers: {
-      setReqs,
-      resetError(state) {
+  name: 'enqDeqReqList',
+  initialState,
+  reducers: {
+    setReqs,
+    setFilter(state, action: PayloadAction<FilterReqArgs>) {
+      state.filter = action.payload
+    },
+    resetError(state) {
+      state.error = null
+    },
+    setLoading(state, action: PayloadAction<boolean>) {
+      state.loading = action.payload
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(filterDataListByName.fulfilled, (state, action) => {
+        state.draftID = action.payload.draftId
+      })
+      .addCase(filterReqs.fulfilled, setReqs)
+      .addCase(filterReqs.rejected, (state, action) => {
+        state.error = action.error.message ?? "Не удалось выполнить запрос"
+        state.loadingFilterReqs = false;
+      })
+      .addCase(filterReqs.pending, (state) => {
+        state.loadingFilterReqs = true;
+      })
+      .addCase(getReqByID.fulfilled, (state, action) => {
+        const req = action.payload[0]
+        const dsList = action.payload[1]
+
+        setReq(state, req)
+        setDSNumbersforReq(state, dsList, req.id, req.status)
+
+        state.loading = false;
         state.error = null
-      },
-      setLoading(state, action: PayloadAction<boolean>) {
-        console.log("in set loading")
-        state.loading = action.payload
-      },
-    },
-    extraReducers: (builder) => {
-      builder
-        .addCase(filterReqs.fulfilled, setReqs)
-        .addCase(filterReqs.rejected, (state, action) => {
-          state.error = action.error.message ?? "Не удалось выполнить запрос"
-          state.loadingFilterReqs = false;
-        })
-        .addCase(filterReqs.pending, (state) => {
-          state.loadingFilterReqs = true;
-        })
-        .addCase(getReqByID.fulfilled, (state, action) => {
-          const req = action.payload[0]
-          const dsList = action.payload[1]
-          
-          setReq(state, req)
-          setDSNumbersforReq(state, dsList, req.id, req.status)
+      })
+      .addCase(getReqByID.rejected, (state, action) => {
+        state.error = action.error.message ?? "Не удалось выполнить запрос"
+        state.loading = false;
+      })
+      .addCase(getReqByID.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getDraft.fulfilled, (state, action) => {
+        const req = action.payload[0]
+        const dsList = action.payload[1]
 
-          state.loading = false;
-          state.error = null
-        })
-        .addCase(getReqByID.rejected, (state, action) => {
-          state.error = action.error.message ?? "Не удалось выполнить запрос"
-          state.loading = false;
-        })
-        .addCase(getReqByID.pending, (state) => {
-          state.loading = true;
-        })
-        .addCase(getDraft.fulfilled, (state, action) => {
-          const req = action.payload[0]
-          const dsList = action.payload[1]
+        setReq(state, req)
+        setDSNumbersforReq(state, dsList, req.id, req.status)
 
-          setReq(state, req)
-          setDSNumbersforReq(state, dsList, req.id, req.status)
-
-          state.loading = false;
-          state.error = null
-        })
-        .addCase(getDraft.rejected, (state, action) => {
-          state.error = action.error.message ?? "Не удалось выполнить запрос"
-          state.loading = false;
-        })
-        .addCase(getDraft.pending, (state) => {
-          state.loading = true;
-        })
-        .addCase(addToDraft.fulfilled, (state, action) => {
-          state.draftID = action.payload
-          state.loading = false;
-        })
-        .addCase(removeFromDraft.fulfilled, (state, action) => {
-          if (state.draft) {
-            state.draft.reqDs = state.draft.reqDs.filter((id) => id !== action.meta.arg)
-          }
-          state.loading = false;
-        })
-        .addCase(removeFromDraft.pending, (state) => {
-          state.loading = true;
-        })
-        .addCase(removeFromDraft.rejected, (state, action) => {
-          state.error = action.error.message ?? "Не удалось выполнить запрос"
-          state.loading = false;
-        })
-        .addCase(formDraft.fulfilled, (state) => {
-          state.draftID, state.draft = null, null
-          state.loading = false;
-        })
-        .addCase(formDraft.pending, (state) => {
-          state.loading = true;
-        })
-        .addCase(formDraft.rejected, (state, action) => {
-          state.error = action.error.message ?? "Не удалось выполнить запрос"
-          state.loading = false;
-        })
-    },
-  });
+        state.loading = false;
+        state.error = null
+      })
+      .addCase(getDraft.rejected, (state, action) => {
+        state.error = action.error.message ?? "Не удалось выполнить запрос"
+        state.loading = false;
+      })
+      .addCase(getDraft.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addToDraft.fulfilled, (state, action) => {
+        console.log('addToDraft.fulfilled')
+        console.log('action.payload', action.payload)
+        state.draftID = action.payload
+        state.loading = false;
+      })
+      .addCase(removeFromDraft.fulfilled, (state, action) => {
+        if (state.draft) {
+          state.draft.reqDs = state.draft.reqDs.filter((id) => id !== action.meta.arg)
+        }
+        state.loading = false;
+      })
+      .addCase(removeFromDraft.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(removeFromDraft.rejected, (state, action) => {
+        state.error = action.error.message ?? "Не удалось выполнить запрос"
+        state.loading = false;
+      })
+      .addCase(formDraft.fulfilled, (state) => {
+        console.log('formDraft.fulfilled')
+        state.draftID = null
+        state.draft = null
+        console.log('state.draftID, state.draft', state.draftID, state.draft)
+        state.loading = false;
+      })
+      .addCase(formDraft.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(formDraft.rejected, (state, action) => {
+        state.error = action.error.message ?? "Не удалось выполнить запрос"
+        state.loading = false;
+      })
+  },
+});
 
 
 export const { actions: enqDeqReqListActions, reducer: enqDeqReqListReducer } = slice

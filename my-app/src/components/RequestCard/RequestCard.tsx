@@ -1,36 +1,18 @@
 import './RequestCard.css'
-import { Card, ListGroup } from 'react-bootstrap';
-import { useEffect } from "react";
-import DataServiceCard from "../DataServiceCard/DataServiceCard.tsx";
+import { Card } from 'react-bootstrap';
 
 import { useAppDispatch } from "../../store";
-import { useLoading, getReqByID, formDraft, removeFromDraft, useReqWithDSByID } from '../../store/encryptDecryptRequestList'
-import { Loader } from '../Loader/Loader.tsx';
+import { formDraft } from '../../store/encryptDecryptRequestList'
 import Button from '../Button/Button.tsx';
+import Request from '../../models/encryptDecryptRequest.ts';
 
 export interface Props {
-    requestID: number
+    request: Request
 }
 
-const RequestCard = ({ requestID }: Props) => {
+const RequestCard = ({ request }: Props) => {
     const dispatch = useAppDispatch()
-
-    console.log('req id in card: ', requestID)
-
-    useEffect(() => {
-        dispatch(getReqByID(requestID))
-    }, [requestID])
-
-    const { request, dsList } = useReqWithDSByID(requestID)
-
-    const handleForm = () => dispatch(formDraft(requestID))
-    const handleRemoveFromDraft = (id: number) => () => dispatch(removeFromDraft(id))
-
-    const loading = useLoading()
-
-    if (loading || !request) {
-        return <Loader />
-    }
+    const handleForm = () => dispatch(formDraft(request.id))
 
     return (
         <Card className="request_card">
@@ -46,20 +28,6 @@ const RequestCard = ({ requestID }: Props) => {
                         text={'Cформировать'}
                         onClick={handleForm} />}
             </Card.Body>
-            <ListGroup className="list-group-flush">
-                {
-                    dsList.map((ds) => (
-                        <ListGroup.Item>
-                            <DataServiceCard ds={ds} imgStyle={{ width: '30%', height: '30%', marginLeft: 'auto', marginRight: 'auto', display: 'block' }} />
-                            {request.status === "draft" &&
-                                <Button
-                                    text={'Удалить из заявки'}
-                                    onClick={handleRemoveFromDraft(ds.id)} />}
-                        </ListGroup.Item>
-                    ))
-                }
-            </ListGroup>
-
         </Card>
     );
 };

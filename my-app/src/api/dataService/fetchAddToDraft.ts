@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from 'js-cookie'
 
 interface RawDraftResponse {
-    draft_id: number,
+    draftID: number,
 }
 
 const config = (token: string, id: number) => ({
@@ -12,12 +12,12 @@ const config = (token: string, id: number) => ({
     headers: {
         Authorization: `Bearer ${token ?? ''}`,
     },
-    timeout: requestTime,  
+    timeout: requestTime,
 })
 
 export const fetchAddToDraft = async (id: number): Promise<number> => {
     const accessToken = Cookies.get(JWT_TOKEN_COOKIE) ?? "";
 
     const resp = await axios<RawDraftResponse>(config(accessToken, id))
-    return resp.data.draft_id
+    return resp.data.draftID
 }

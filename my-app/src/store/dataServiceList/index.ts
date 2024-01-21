@@ -1,3 +1,3 @@
 export { dataServiceListActions } from './slice'
 export { filterDataListByName, addToDraft } from './thunks'
-export { useDataServiceByID, useDataServices, useLoading } from './selectors'
+export { useDataServiceByID, useDataServices, useLoading, useError, useSuccessAddToDraft } from './selectors'

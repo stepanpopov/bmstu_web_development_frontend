@@ -16,7 +16,7 @@ const config = (token: string, id: number) => ({
     headers: {
         Authorization: `Bearer ${token}`,
     },
-    timeout: requestTime,  
+    timeout: requestTime,
 })
 
 export const fetchReqByID = async (id: number): Promise<[EncryptDecryptRequest, DataService[]]> => {
@@ -24,9 +24,9 @@ export const fetchReqByID = async (id: number): Promise<[EncryptDecryptRequest, 
 
     const resp = await axios<RawResponse>(config(accessToken, id))
     const dsList: DataService[] = resp.data.dataServices.map((ds: RawDataService) => ({
-        id: ds.data_id, 
-        name: ds.data_name, 
-        blob: ds.blob, 
+        id: ds.data_id,
+        name: ds.data_name,
+        blob: ds.blob,
         image: ds.image_url,
         encode: ds.encode,
         active: ds.active,
@@ -42,7 +42,6 @@ export const fetchReqByID = async (id: number): Promise<[EncryptDecryptRequest, 
         moderator: (r.Moderator === null ? undefined : r.Moderator),
         creator: (r.Creator === null ? undefined : r.Creator),
     }
-    console.log('got req: ', req)
 
     return [req, dsList]
 }

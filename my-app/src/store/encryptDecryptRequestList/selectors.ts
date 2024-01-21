@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../types";
 import EncryptDecryptRequest from "../../models/encryptDecryptRequest";
-import {Req} from "./slice"
+import { Req } from "./slice"
 import DataService from "../../models/dataService";
 import { memoize } from 'proxy-memoize';
 
@@ -17,11 +17,11 @@ const dsListByIDs = (state: RootState, ids: number[]): DataService[] => {
     return dsList
 }
 
-export const useOtherReqList= (): EncryptDecryptRequest[]  => useSelector(memoize(( { enqDeqReqList: {otherReqs}}: RootState ) => 
+export const useOtherReqList = (): EncryptDecryptRequest[] => useSelector(memoize(({ enqDeqReqList: { otherReqs } }: RootState) =>
     (Object.entries(otherReqs).map(([_, req]) => req.req)))
 )
 
-export const useError = () => useSelector((state: RootState) => 
+export const useError = () => useSelector((state: RootState) =>
     (state.enqDeqReqList.error)
 )
 
@@ -29,18 +29,18 @@ export const useReqWithDSByID = (id: number) => useSelector(memoize((state: Root
     let req: Req | null = state.enqDeqReqList.otherReqs[id]
     if (!req && state.enqDeqReqList.draft) {
         req = (
-            state.enqDeqReqList.draft.req.id === id ? 
-                    state.enqDeqReqList.draft : 
-                    null
+            state.enqDeqReqList.draft.req.id === id ?
+                state.enqDeqReqList.draft :
+                null
         );
     }
 
     if (!req) {
-        return {request: null, dsList: []}
+        return { request: null, dsList: [] }
         // return [null, []]
     }
 
-    return {request: req.req, dsList: dsListByIDs(state, req.reqDs)}
+    return { request: req.req, dsList: dsListByIDs(state, req.reqDs) }
     // return [req.req, dsListByIDs(state, req.reqDs)]
 }))
 
@@ -48,9 +48,9 @@ export const useReqsDSListByID = (id: number) => useSelector(memoize((state: Roo
     let req: Req | undefined = state.enqDeqReqList.otherReqs[id]
     if (!req && state.enqDeqReqList.draft) {
         req = (
-            state.enqDeqReqList.draft.req.id === id ? 
-                    state.enqDeqReqList.draft : 
-                    undefined
+            state.enqDeqReqList.draft.req.id === id ?
+                state.enqDeqReqList.draft :
+                undefined
         );
     }
 
@@ -71,16 +71,22 @@ export const useDraftWithDS = () => useSelector((state: RootState) => {
     return [draft.req, dsListByIDs(state, draft.reqDs)]
 })
 
-export const useDraft = () => useSelector(memoize(({ enqDeqReqList: {draft}}: RootState) => (
+export const useDraft = () => useSelector(memoize(({ enqDeqReqList: { draft } }: RootState) => (
     draft?.req
 )))
+
+export const useDraftID = () => useSelector(({ enqDeqReqList: { draftID } }: RootState) => (
+    draftID
+))
 
 export const useLoadingFilterReqs = () => useSelector((state: RootState) => (state.enqDeqReqList.loadingFilterReqs))
 
 export const useLoading = () => useSelector((state: RootState) => (state.enqDeqReqList.loading))
 
-export const useDraftActive = () => 
+export const useDraftActive = () =>
     useSelector((state: RootState) => state.enqDeqReqList.draftID !== null)
 
-export const useRequestsActive = () => 
-    useSelector((state:RootState) => state.enqDeqReqList.draftID || Object.entries(state.enqDeqReqList.otherReqs).length !== 0)
+export const useRequestsActive = () =>
+    useSelector((state: RootState) => state.enqDeqReqList.draftID || Object.entries(state.enqDeqReqList.otherReqs).length !== 0)
+
+export const useReqFilter = () => useSelector((state: RootState) => state.enqDeqReqList.filter)

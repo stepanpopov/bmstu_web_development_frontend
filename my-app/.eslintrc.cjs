@@ -14,7 +14,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    'unused-imports/no-unused-imports-ts': 'warn',
-    "react/jsx-indent": [2, 4, { checkAttributes: true, indentLogicalExpressions: true }],
+    'unused-imports/no-unused-imports-ts': 'error',
+    // "react/jsx-indent": [{ checkAttributes: true, indentLogicalExpressions: true }],
   },
 }

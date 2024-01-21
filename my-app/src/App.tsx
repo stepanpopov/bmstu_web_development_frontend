@@ -10,6 +10,7 @@ import DataServiceListPage from "./pages/DataServiceListPage/DataServiceListPage
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 import RequestsPage from "./pages/RequestsPage/RequestsPage.tsx";
+import RequestPage from "./pages/RequestPage/RequestPage.tsx";
 
 import { Page, SetPageTitleLink } from './models/common.ts';
 import Navbar from './components/Navbar/Navbar.tsx';
@@ -20,14 +21,16 @@ import PrivateRoute from './components/PrivateRoute/PrivateRoute.tsx';
 import { mainPage, loginPage, registerPage, requestsPage, navTitle, footerTitle } from './consts.tsx';
 
 import { useAppDispatch } from "./store";
-import { useUser } from './store/user'
+import { useLoading, useUser } from './store/user'
 import { checkAuth } from './store/user'
 
 // TODO:
-// добавить тоаст - добавлено в заявку?
-// добавить корзину
-// добавить вид таблицей
-// добавить параметры к заявке?
+// добавить параметры к заявке (намутить crc или мб сначала посмотреть теорию по сетям)
+
+// для моедратора:
+// добавить возможность редактирования услуги
+// добавить возможность завершения / отклонения заявки
+
 
 
 export const App = () => {
@@ -37,13 +40,14 @@ export const App = () => {
   const [pages, setPages] = useState<Page[]>([])
 
   const getSetter = (...args: Page[]) => () => setPages(args)
-  const getSetterLink = (title: string, ...args: Page[]) => (link: string) => setPages([...args, { link, title }])
+  // const getSetterLink = (title: string, ...args: Page[]) => (link: string) => setPages([...args, { link, title }])
   const getSetterTiltleLink = (...args: Page[]): SetPageTitleLink => (link: string, title: string) => setPages([...args, { link, title }])
 
   const user = useUser()
+  const loading = useLoading()
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !loading) {
       navigate(mainPage.link)
     }
   }, [user])
@@ -81,10 +85,15 @@ export const App = () => {
           <RegisterPage setPage={getSetter(registerPage)} mainPageLink={mainPage.link} />
         } />
 
-        <Route element={<PrivateRoute isAuth={!!user} loginPageLink={loginPage.link} />}>
+        <Route element={<PrivateRoute loginPageLink={loginPage.link} />}>
+          <Route path="/requests/:id" element={
+            <RequestPage setPage={getSetterTiltleLink(mainPage, requestsPage)} />
+          } />
+
           <Route path="/requests" element={
             <RequestsPage setPage={getSetter(mainPage, requestsPage)} />
           } />
+
         </Route>
 
       </Routes>
@@ -92,6 +101,6 @@ export const App = () => {
       <Footer text={footerTitle} />
 
 
-    </Container>
+    </Container >
   )
 }

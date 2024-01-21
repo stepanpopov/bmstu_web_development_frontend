@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SetPage } from '../../models/common.ts';
 import { useAppDispatch } from '../../store/hooks.ts';
 import { useEffect, useState } from 'react';
@@ -19,8 +19,10 @@ interface RegisterPageProps {
 
 const RegisterPage = ({ setPage, mainPageLink }: RegisterPageProps) => {
     const navigate = useNavigate();
+    const navigateOnSuccess = useLocation().key !== "default" ? () => navigate(-1) : () => navigate(mainPageLink)
+
     const dispatch = useAppDispatch();
-    
+
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
 
@@ -29,9 +31,9 @@ const RegisterPage = ({ setPage, mainPageLink }: RegisterPageProps) => {
     const user = useUser()
 
     const handleSubmit = async () => {
-        console.log('handle called')
-        await dispatch(registerThunk( {login, password, isModerator: isModeratorMock} ))
-        dispatch(loginThunk({login, password}))
+
+        await dispatch(registerThunk({ login, password, isModerator: isModeratorMock }))
+        dispatch(loginThunk({ login, password }))
     };
 
     useEffect(() => {
@@ -43,16 +45,16 @@ const RegisterPage = ({ setPage, mainPageLink }: RegisterPageProps) => {
             toast.warn(error)
             dispatch(userActions.resetError())
         }
-    }, [error] )
+    }, [error])
 
     useEffect(() => {
         if (user) {
-            navigate(mainPageLink)
+            navigateOnSuccess()
         }
     }, [user])
 
     if (loading) {
-        return <Loader/>
+        return <Loader />
     }
 
     return (
@@ -80,7 +82,7 @@ const RegisterPage = ({ setPage, mainPageLink }: RegisterPageProps) => {
                             />
 
                             <Button variant="primary" type="submit" className="w-100 mt-4" onClick={handleSubmit}
-                                    style={{borderRadius: '10px'}}>
+                                style={{ borderRadius: '10px' }}>
                                 Войти
                             </Button>
                         </div>

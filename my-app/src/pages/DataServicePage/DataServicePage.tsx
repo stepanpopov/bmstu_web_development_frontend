@@ -19,7 +19,7 @@ const DataServicePage = ({ setPage }: Props) => {
     // handle not convertable id
     const dispatch = useAppDispatch()
 
-    console.log(id)
+
 
     useEffect(() => {
         dispatch(dataServiceActions.setLoading())

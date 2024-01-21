@@ -10,8 +10,8 @@ const Breadcrumbs = ({ pages }: BreadcrumbsProps) => {
   const location = useLocation();
 
   return (
-    <nav>
-        {
+      <nav>
+          {
             pages.map((p: Page) => (
                 <Link to={p.link}
                     className={location.pathname === p.link ? "breadcrumb-active" : "breadcrumb-not-active"}
@@ -21,7 +21,7 @@ const Breadcrumbs = ({ pages }: BreadcrumbsProps) => {
                 </Link>
             ))
         }
-    </nav>
+      </nav>
   );
 }
 

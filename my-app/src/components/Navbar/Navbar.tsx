@@ -1,15 +1,16 @@
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Image } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
-import { useUser } from '../../store/user'
+import { useUser, useLoading } from '../../store/user'
 import { useAppDispatch } from "../../store";
 import { logout } from '../../store/user'
 
-import { filterReqs, useRequestsActive } from '../../store/encryptDecryptRequestList'
+import { useDraftID } from '../../store/encryptDecryptRequestList'
 
 import './Navbar.css'
 import { useEffect } from 'react';
+import { Loader } from '../Loader/Loader';
 
 interface NavbarProps {
   title: string,
@@ -19,6 +20,8 @@ interface NavbarProps {
   requestsPageLink: string,
 }
 
+const draftImg = new URL('/draft.png', import.meta.url).href
+
 const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, requestsPageLink }: NavbarProps) => {
   const navigate = useNavigate()
 
@@ -26,12 +29,13 @@ const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, reques
   const user = useUser()
 
   useEffect(() => {
-    dispatch(filterReqs({}))
-    console.log('filterReqs in navbar called')
-  }, [])
-  // const draftActive = useDraftActive()
-  const reqsActive = useRequestsActive()
+    // dispatch(filterReqs({}))
 
+  }, [])
+  const draftID = useDraftID()
+  const draftActive = !!draftID;
+
+  const onDraftClick = () => (navigate(`${requestsPageLink}/${draftID}`))
 
   const logoutHandler = () => {
     dispatch(logout())
@@ -49,6 +53,11 @@ const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, reques
     navigate(requestsPageLink)
   }
 
+  const loading = useLoading()
+  if (loading) {
+    return <Loader />
+  }
+
   return (
     <Navbar expand="lg">
       <Container fluid style={{ width: "100%" }}>
@@ -59,7 +68,12 @@ const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, reques
             </Link>
           </Col>
           <Col lg="5">
-            <Button variant="outline-warning" onClick={requestsHandler} disabled={!reqsActive && !user} >Шифрование кодом Хэмминга</Button>
+            <Button variant="outline-warning" onClick={requestsHandler} disabled={!user} >Шифрование кодом Хэмминга</Button>
+          </Col>
+          <Col lg="1">
+            <Button variant="outline-warning" onClick={onDraftClick} disabled={!draftActive || !user} >
+              <Image src={draftImg} style={{ maxWidth: '30%', maxHeight: '30%' }} />
+            </Button>
           </Col>
           {user ?
             <>

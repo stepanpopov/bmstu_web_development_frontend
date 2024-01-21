@@ -2,9 +2,9 @@ import { DOMAIN, requestTime } from "../../consts"
 import axios from "axios";
 
 interface RawResponse {
-    expires_in:   number,
-	access_token: string,
-	token_type:   "Bearer",
+    expires_in: number,
+    access_token: string,
+    token_type: "Bearer",
 }
 
 const config = (login: string, password: string) => ({
@@ -14,11 +14,10 @@ const config = (login: string, password: string) => ({
         login,
         password
     },
-    timeout: requestTime,  
+    timeout: requestTime,
 })
 
 export const fetchLogin = async (login: string, password: string): Promise<string> => {
     const resp = await axios<RawResponse>(config(login, password))
-    console.log(resp)
     return resp.data.access_token
 }

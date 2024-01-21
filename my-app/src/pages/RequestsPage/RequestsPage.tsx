@@ -1,15 +1,16 @@
-import { Container} from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { useEffect } from 'react';
-import RequestCard from '../../components/RequestCard/RequestCard.tsx';
+import RequestsTable from '../../components/RequestsTable/RequestsTable.tsx';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { SetPage } from '../../models/common.ts';
 
-import {useAppDispatch} from "../../store";
-import { enqDeqReqListActions, useLoadingFilterReqs, useError, useDraft, filterReqs, useOtherReqList } from '../../store/encryptDecryptRequestList'
-import { Loader } from '../../components/Loader/Loader.tsx';
+import { useAppDispatch } from "../../store";
+import { enqDeqReqListActions, useError, useDraft, filterReqs, useOtherReqList } from '../../store/encryptDecryptRequestList'
+import RequestsInputFilter from '../../components/RequestsInputFilter/RequestsInputFilter.tsx';
+import { useReqFilter } from '../../store/encryptDecryptRequestList/selectors.ts';
 
 interface Props {
     setPage: SetPage
@@ -19,41 +20,35 @@ const RequestsPage = ({ setPage }: Props) => {
 
     const dispatch = useAppDispatch()
 
+    const filters = useReqFilter()
+
     useEffect(() => {
         setPage()
-        dispatch(filterReqs({}))
-        console.log('filterReqs called')
+        dispatch(filterReqs(filters))
     }, [])
 
     const draftReq = useDraft()
     const otherReqs = useOtherReqList()
-    const loading = useLoadingFilterReqs()
+    const reqsWithDraft = draftReq ? [draftReq, ...otherReqs] : otherReqs
+
+    // const loading = useLoadingFilterReqs()
     const error = useError()
 
-   
-
     useEffect(() => {
-        console.log('error:', error)
         if (error) {
             toast.warn(error)
             dispatch(enqDeqReqListActions.resetError())
         }
-    }, [error] )
+    }, [error])
 
-    console.log('rendering requests page loader')
-    if (loading) {
-        return <Loader/>
-    }
 
-    console.log('rendering requests page')
     return (
         <Container>
             <ToastContainer position="top-center" newestOnTop={false} />
-            { draftReq && <RequestCard key={draftReq.id} requestID={draftReq.id} /> }
-            {
-                otherReqs.map((req) => (
-                    <RequestCard key={req.id} requestID={req.id} />
-                ))
+            <RequestsInputFilter />
+            {reqsWithDraft.length === 0 || reqsWithDraft === undefined ?
+                <h3>Нет заявок</h3> :
+                <RequestsTable requests={reqsWithDraft} />
             }
         </Container>
     );

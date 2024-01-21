@@ -1,7 +1,10 @@
-export type Status = "draft" | "formed" | "finished" | "rejected" | "deleted"
+
+export const StatusTypes = ["draft", "formed", "finished", "rejected", "deleted"] as const
+
+export type Status = typeof StatusTypes[number];
 
 export const getStatusFromNumber = (num: number): Status => {
-    console.log(num)
+
     switch (num) {
         case 0:
             return "draft";
@@ -15,6 +18,23 @@ export const getStatusFromNumber = (num: number): Status => {
             return "rejected";
         default:
             throw new Error(`Invalid number: ${num}`);
+    }
+}
+
+export const getStatusFromString = (str: string): Status | undefined => {
+    switch (str) {
+        case "draft":
+            return "draft";
+        case "deleted":
+            return "deleted";
+        case "formed":
+            return "formed";
+        case "finished":
+            return "finished";
+        case "rejected":
+            return "rejected";
+        default:
+            return undefined
     }
 }
 
