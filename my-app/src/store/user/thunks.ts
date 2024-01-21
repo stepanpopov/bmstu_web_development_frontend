@@ -1,11 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie'
-import { fetchLogin, fetchLogout, fetchRegister, fetchCheckAuth } from '../../api/user'
+import { fetchLogin, fetchLogout, fetchRegister, fetchCheckAuth, LoginResponse } from '../../api/user'
 import { JWT_TOKEN_COOKIE, USERNAME_COOKIE, USER_ROLE_COOKIE } from '../../consts';
 import { RootState } from '../types';
 import { userActions } from './slice';
 import { getRoleFromString } from '../../models/user'
-import { userRoleMock } from '../../consts'
 
 export interface Login {
     login: string,
@@ -16,17 +15,18 @@ export interface Register extends Login {
     isModerator: boolean
 }
 
-export const login = createAsyncThunk<string, Login, { state: RootState }>(
+export const login = createAsyncThunk<LoginResponse, Login, { state: RootState }>(
     'user/login',
     async (args, { dispatch }) => {
 
         const resp = await fetchLogin(args.login, args.password)
-        Cookies.set(JWT_TOKEN_COOKIE, resp)
+        const role = resp.isModerator ? 'moderator' : 'user'
+
+        Cookies.set(JWT_TOKEN_COOKIE, resp.accessToken)
         Cookies.set(USERNAME_COOKIE, args.login)
-        Cookies.set(USER_ROLE_COOKIE, userRoleMock)
+        Cookies.set(USER_ROLE_COOKIE, role)
 
-
-        dispatch(userActions.setUser({ login: args.login, role: userRoleMock }))
+        dispatch(userActions.setUser({ login: args.login, role }))
         return resp
     }
 )
@@ -59,7 +59,6 @@ export const checkAuth = createAsyncThunk<void, void, { state: RootState }>(
             dispatch(userActions.setLoading(false))
             return
         }
-
 
         const username = Cookies.get(USERNAME_COOKIE)
         const userRole = Cookies.get(USER_ROLE_COOKIE)

@@ -27,6 +27,9 @@ const slice = createSlice({
     },
     setLoading(state) {
       state.loading = true
+    },
+    setStopLoading(state) {
+      state.loading = false
     }
   },
   extraReducers: (builder) => {

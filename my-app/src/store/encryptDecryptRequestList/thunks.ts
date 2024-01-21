@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { fetchFilterReqs, FilterReqArgs, fetchReqByID, fetchFormDraft } from '../../api/encryptDecryptRequest'
+import { fetchFilterReqs, FilterReqArgs, fetchReqByID, fetchFormDraft, fetchUpdateModeratorReq, UpdateModeratorReq } from '../../api/encryptDecryptRequest'
 import { fetchDeleteFromDraft } from '../../api/dataService'
 
 export { type FilterReqArgs } from '../../api/encryptDecryptRequest'
@@ -8,6 +8,7 @@ export { type FilterReqArgs } from '../../api/encryptDecryptRequest'
 import EncryptDecryptRequst from '../../models/encryptDecryptRequest';
 import DataService from '../../models/dataService';
 import { RootState } from '../types';
+import { Filter } from './slice';
 
 export const filterReqs = createAsyncThunk<EncryptDecryptRequst[], FilterReqArgs>(
     'encryptDecryptRequestList/filterReqListByName',
@@ -15,6 +16,15 @@ export const filterReqs = createAsyncThunk<EncryptDecryptRequst[], FilterReqArgs
         console.log('filterReqs', args)
         const reqList = await fetchFilterReqs({ status: args.status, startDate: args.startDate, endDate: args.endDate })
         return reqList
+    }
+);
+
+export const filterReqsModerator = createAsyncThunk<EncryptDecryptRequst[], Filter>(
+    'encryptDecryptRequestList/filterReqModeratorListByName',
+    async (args) => {
+        console.log('filterReqs', args)
+        const reqList = await fetchFilterReqs({ status: args.status, startDate: args.startDate, endDate: args.endDate })
+        return reqList.filter((req) => req.creator?.startsWith(args.creator ?? ''))
     }
 );
 
@@ -75,3 +85,10 @@ export const formDraft = createAsyncThunk<void, number, { state: RootState }>(
         await fetchFormDraft(id)
     }
 )
+
+export const updateModeratorReq = createAsyncThunk<void, UpdateModeratorReq, { state: RootState }>(
+    'encryptDecryptRequestList/updateModeratorReq',
+    async (req, { getState }) => {
+        await fetchUpdateModeratorReq(req)
+    }
+)  

@@ -18,11 +18,12 @@ interface NavbarProps {
   loginPageLink: string,
   registerPageLink: string,
   requestsPageLink: string,
+  requestsModeratorPageLink: string,
 }
 
 const draftImg = new URL('/draft.png', import.meta.url).href
 
-const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, requestsPageLink }: NavbarProps) => {
+const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, requestsPageLink, requestsModeratorPageLink }: NavbarProps) => {
   const navigate = useNavigate()
 
   const dispatch = useAppDispatch()
@@ -53,6 +54,10 @@ const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, reques
     navigate(requestsPageLink)
   }
 
+  const requestsModeratorHandler = () => {
+    navigate(requestsModeratorPageLink)
+  }
+
   const loading = useLoading()
   if (loading) {
     return <Loader />
@@ -67,9 +72,14 @@ const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, reques
               {title}
             </Link>
           </Col>
-          <Col lg="5">
+          <Col lg="2">
             <Button variant="outline-warning" onClick={requestsHandler} disabled={!user} >Шифрование кодом Хэмминга</Button>
           </Col>
+          {user?.role === 'moderator' &&
+            <Col lg="1">
+              <Button variant="outline-warning" onClick={requestsModeratorHandler}> Управление шифрованием </Button>
+            </Col>
+          }
           <Col lg="1">
             <Button variant="outline-warning" onClick={onDraftClick} disabled={!draftActive || !user} >
               <Image src={draftImg} style={{ maxWidth: '30%', maxHeight: '30%' }} />

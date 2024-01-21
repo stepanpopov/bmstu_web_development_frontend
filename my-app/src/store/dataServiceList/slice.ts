@@ -46,11 +46,10 @@ const slice = createSlice({
       state.entities[data.id] = data
       state.ids.push(data.id);
     },
-    removeData(state, action: PayloadAction<DataService>) {
-      const data = action.payload;
-
-      delete state.entities[data.id];
-      state.ids = state.ids.filter((id) => id !== data.id);
+    removeData(state, action: PayloadAction<number>) {
+      const dsID = action.payload;
+      delete state.entities[dsID];
+      state.ids = state.ids.filter((id) => id !== dsID);
     },
     setDatas(state, action: PayloadAction<DataService[]>) {
       const data = action.payload;

@@ -6,19 +6,22 @@ import { Container } from 'react-bootstrap';
 import './index.css'
 
 import DataServicePage from "./pages/DataServicePage/DataServicePage.tsx";
+import DataServiceModeratorPage from "./pages/DataServiceModeratorPage/DataServiceModeratorPage.tsx";
+import DataServiceNewModeratorPage from "./pages/DataServiceNewModeratorPage/DataServiceNewModeratorPage.tsx";
 import DataServiceListPage from "./pages/DataServiceListPage/DataServiceListPage.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 import RequestsPage from "./pages/RequestsPage/RequestsPage.tsx";
 import RequestPage from "./pages/RequestPage/RequestPage.tsx";
+import RequestsModeratorPage from "./pages/RequestsModeratorPage/RequestsModeratorPage.tsx";
 
 import { Page, SetPageTitleLink } from './models/common.ts';
 import Navbar from './components/Navbar/Navbar.tsx';
 import Footer from './components/Footer/Footer.tsx';
 import BreadCrumbs from './components/BreadCrumbs/BreadCrumbs.tsx';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute.tsx';
+import { PrivateRouteModerator, PrivateRouteUser } from './components/PrivateRoute/PrivateRoute.tsx';
 
-import { mainPage, loginPage, registerPage, requestsPage, navTitle, footerTitle } from './consts.tsx';
+import { mainPage, loginPage, registerPage, requestsPage, requestsModeratorPage, navTitle, footerTitle, dsModeratorNewPage } from './consts.tsx';
 
 import { useAppDispatch } from "./store";
 import { useLoading, useUser } from './store/user'
@@ -26,12 +29,8 @@ import { checkAuth } from './store/user'
 
 // TODO:
 // добавить параметры к заявке (намутить crc или мб сначала посмотреть теорию по сетям)
-
-// для моедратора:
-// добавить возможность редактирования услуги
-// добавить возможность завершения / отклонения заявки
-
-
+// поправить верстку
+// тест с асинхронным
 
 export const App = () => {
   const navigate = useNavigate()
@@ -64,13 +63,14 @@ export const App = () => {
         loginPageLink={loginPage.link}
         registerPageLink={registerPage.link}
         requestsPageLink={requestsPage.link}
+        requestsModeratorPageLink={requestsModeratorPage.link}
       />
       <BreadCrumbs pages={pages} />
 
       <Routes>
 
         <Route path="/" element={
-          <DataServiceListPage setPage={getSetter(mainPage)} />
+          <DataServiceListPage setPage={getSetter(mainPage)} moderatorNewDSPageLink={dsModeratorNewPage.link} />
         } />
 
         <Route path="/service/:id" element={
@@ -85,13 +85,28 @@ export const App = () => {
           <RegisterPage setPage={getSetter(registerPage)} mainPageLink={mainPage.link} />
         } />
 
-        <Route element={<PrivateRoute loginPageLink={loginPage.link} />}>
+        <Route element={<PrivateRouteUser loginPageLink={loginPage.link} mainPageLink={mainPage.link} />}>
           <Route path="/requests/:id" element={
             <RequestPage setPage={getSetterTiltleLink(mainPage, requestsPage)} />
           } />
 
           <Route path="/requests" element={
             <RequestsPage setPage={getSetter(mainPage, requestsPage)} />
+          } />
+
+        </Route>
+
+        <Route element={<PrivateRouteModerator loginPageLink={loginPage.link} mainPageLink={mainPage.link} />}>
+          <Route path="/requests_moderator" element={
+            <RequestsModeratorPage setPage={getSetter(mainPage, requestsModeratorPage)} />
+          } />
+
+          <Route path="/service/:id/update" element={
+            <DataServiceModeratorPage setPage={getSetterTiltleLink(mainPage)} />
+          } />
+
+          <Route path="/service/new" element={
+            <DataServiceNewModeratorPage mainPageLink={mainPage.link} setPage={getSetter(mainPage, dsModeratorNewPage)} />
           } />
 
         </Route>

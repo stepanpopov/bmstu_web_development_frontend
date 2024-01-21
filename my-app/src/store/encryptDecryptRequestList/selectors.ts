@@ -90,3 +90,7 @@ export const useRequestsActive = () =>
     useSelector((state: RootState) => state.enqDeqReqList.draftID || Object.entries(state.enqDeqReqList.otherReqs).length !== 0)
 
 export const useReqFilter = () => useSelector((state: RootState) => state.enqDeqReqList.filter)
+
+export const useOtherReqListByCreator = (creator: string): EncryptDecryptRequest[] => useSelector(memoize(({ enqDeqReqList: { otherReqs } }: RootState) =>
+    (Object.entries(otherReqs).map(([_, req]) => req.req)).filter((req: EncryptDecryptRequest) => req.creator?.startsWith(creator)))
+)

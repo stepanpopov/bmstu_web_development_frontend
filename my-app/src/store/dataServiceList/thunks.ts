@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { fetchDataListByName, fetchAddToDraft } from '../../api/dataService'
+import { fetchDataListByName, fetchAddToDraft, fetchDeleteDs } from '../../api/dataService'
 import { RootState } from '../types';
 import { axiousErrResp } from '../utils';
 import { FilterResponse } from '../../api/dataService/filterDataServices';
+import { dataServiceListActions } from '.';
 export { type FilterResponse } from '../../api/dataService/filterDataServices';
 
 export const filterDataListByName = createAsyncThunk<FilterResponse, string, { state: RootState }>(
@@ -26,7 +27,11 @@ export const addToDraft = createAsyncThunk<number, number, { state: RootState, r
     }
 )
 
-// TODO: 
-// убрать из стора dataService
-// можно вызывать диспатч в thunk ах
-// 
+export const deleteDS = createAsyncThunk<void, number, { state: RootState }>(
+    'dataServiceList/deleteDSByID',
+    async (id, { dispatch }) => {
+        dispatch(dataServiceListActions.removeData(id))
+        await fetchDeleteDs(id)
+    }
+)
+

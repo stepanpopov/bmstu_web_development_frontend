@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import EncDeqRequest, { Status } from "../../models/encryptDecryptRequest";
-import { filterReqs, getReqByID, getDraft, removeFromDraft, formDraft, FilterReqArgs } from './thunks'
+import { filterReqs, filterReqsModerator, getReqByID, getDraft, removeFromDraft, formDraft, FilterReqArgs } from './thunks'
 import DataService from "../../models/dataService";
 import { filterDataListByName } from "../dataServiceList/thunks"
 import { addToDraft } from "../dataServiceList"
@@ -14,6 +14,9 @@ interface Reqs {
   [key: number]: Req
 }
 
+export interface Filter extends FilterReqArgs {
+  creator?: string
+}
 
 interface State {
   dsList: DataService[],
@@ -24,7 +27,7 @@ interface State {
   loadingFilterReqs: boolean
   error: string | null
 
-  filter: FilterReqArgs
+  filter: Filter
 }
 
 const initialState: State = {
@@ -114,7 +117,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     setReqs,
-    setFilter(state, action: PayloadAction<FilterReqArgs>) {
+    setFilter(state, action: PayloadAction<Filter>) {
       state.filter = action.payload
     },
     resetError(state) {
@@ -135,6 +138,14 @@ const slice = createSlice({
         state.loadingFilterReqs = false;
       })
       .addCase(filterReqs.pending, (state) => {
+        state.loadingFilterReqs = true;
+      })
+      .addCase(filterReqsModerator.fulfilled, setReqs)
+      .addCase(filterReqsModerator.rejected, (state, action) => {
+        state.error = action.error.message ?? "Не удалось выполнить запрос"
+        state.loadingFilterReqs = false;
+      })
+      .addCase(filterReqsModerator.pending, (state) => {
         state.loadingFilterReqs = true;
       })
       .addCase(getReqByID.fulfilled, (state, action) => {

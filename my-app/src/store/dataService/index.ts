@@ -1,4 +1,3 @@
 export { dataServiceActions } from './slice';
-export { getDsByID } from './thunks';
+export { getDsByID, createDS, updateDS, updateCoverDS } from './thunks';
 export { useDataService, useLoading } from './selectors';
-

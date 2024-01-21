@@ -8,15 +8,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SetPage } from '../../models/common.ts';
 
 import { useAppDispatch } from "../../store";
-import { enqDeqReqListActions, useError, useDraft, filterReqs, useOtherReqList } from '../../store/encryptDecryptRequestList'
+import { enqDeqReqListActions, useError, filterReqs } from '../../store/encryptDecryptRequestList'
 import RequestsInputFilter from '../../components/RequestsInputFilter/RequestsInputFilter.tsx';
-import { useReqFilter } from '../../store/encryptDecryptRequestList/selectors.ts';
+import { useOtherReqList, useReqFilter } from '../../store/encryptDecryptRequestList/selectors.ts';
 
 interface Props {
     setPage: SetPage
 }
 
-const RequestsPage = ({ setPage }: Props) => {
+const RequestsModeratorPage = ({ setPage }: Props) => {
 
     const dispatch = useAppDispatch()
 
@@ -24,15 +24,12 @@ const RequestsPage = ({ setPage }: Props) => {
 
     useEffect(() => {
         setPage()
-        dispatch(filterReqs(filters))
+        dispatch(filterReqs(filters)) // !
     }, [])
 
-
-    const draftReq = useDraft()
-    const otherReqs = useOtherReqList()
-
-    const isStatusForDraft = (filters.status === 'draft' || filters.status === undefined)
-    const reqsWithDraft = (draftReq && isStatusForDraft) ? [draftReq, ...otherReqs] : otherReqs
+    // const draftReq = useDraft()
+    const reqs = useOtherReqList()
+    // const reqsWithDraft = draftReq ? [draftReq, ...otherReqs] : otherReqs
 
     // const loading = useLoadingFilterReqs()
     const error = useError()
@@ -48,13 +45,13 @@ const RequestsPage = ({ setPage }: Props) => {
     return (
         <Container>
             <ToastContainer position="top-center" newestOnTop={false} />
-            <RequestsInputFilter />
-            {reqsWithDraft.length === 0 || reqsWithDraft === undefined ?
+            <RequestsInputFilter isModerator={true} />
+            {reqs.length === 0 || reqs === undefined ?
                 <h3>Нет заявок</h3> :
-                <RequestsTable requests={reqsWithDraft} />
+                <RequestsTable requests={reqs} isModerator={true} />
             }
         </Container>
     );
 };
 
-export default RequestsPage;
+export default RequestsModeratorPage;
