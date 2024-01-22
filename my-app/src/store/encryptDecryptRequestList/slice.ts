@@ -84,7 +84,16 @@ const setReq = (state: State, request: EncDeqRequest) => {
     return
   }
 
-  state.otherReqs[request.id].req = request
+  const curReq = state.otherReqs[request.id]
+  if (curReq) {
+    state.otherReqs[request.id].req = request
+    return
+  }
+
+  state.otherReqs[request.id] = {
+    req: request,
+    reqDs: [],
+  }
 }
 
 const setDSNumbersforReq = (state: State, dsList: DataService[], requestID: number, status: Status) => {

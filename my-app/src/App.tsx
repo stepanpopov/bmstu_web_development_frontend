@@ -21,11 +21,12 @@ import Footer from './components/Footer/Footer.tsx';
 import BreadCrumbs from './components/BreadCrumbs/BreadCrumbs.tsx';
 import { PrivateRouteModerator, PrivateRouteUser } from './components/PrivateRoute/PrivateRoute.tsx';
 
-import { mainPage, loginPage, registerPage, requestsPage, requestsModeratorPage, navTitle, footerTitle, dsModeratorNewPage } from './consts.tsx';
+import { mainPage, loginPage, registerPage, requestsPage, requestsModeratorPage, navTitle, footerTitle, dsModeratorNewPage, dsModeratorTabele } from './consts.tsx';
 
 import { useAppDispatch } from "./store";
 import { useLoading, useUser } from './store/user'
 import { checkAuth } from './store/user'
+import DataServiceListModeratorPage from './pages/DataServiceListModeratorPage/DataServiceListModeratorPage.tsx';
 
 // TODO:
 // добавить параметры к заявке (намутить crc или мб сначала посмотреть теорию по сетям)
@@ -64,13 +65,16 @@ export const App = () => {
         registerPageLink={registerPage.link}
         requestsPageLink={requestsPage.link}
         requestsModeratorPageLink={requestsModeratorPage.link}
+        servicesModeratorPageLink={dsModeratorTabele.link}
       />
       <BreadCrumbs pages={pages} />
 
       <Routes>
 
         <Route path="/" element={
-          <DataServiceListPage setPage={getSetter(mainPage)} moderatorNewDSPageLink={dsModeratorNewPage.link} />
+          <DataServiceListPage setPage={getSetter(mainPage)}
+            requestsPageLink={requestsPage.link}
+          />
         } />
 
         <Route path="/service/:id" element={
@@ -87,19 +91,19 @@ export const App = () => {
 
         <Route element={<PrivateRouteUser loginPageLink={loginPage.link} mainPageLink={mainPage.link} />}>
           <Route path="/requests/:id" element={
-            <RequestPage setPage={getSetterTiltleLink(mainPage, requestsPage)} />
+            <RequestPage setPage={getSetterTiltleLink(mainPage, user?.role === 'moderator' ? requestsModeratorPage : requestsPage)} />
           } />
 
-          <Route path="/requests" element={
+          {user?.role === 'user' && <Route path="/requests" element={
             <RequestsPage setPage={getSetter(mainPage, requestsPage)} />
-          } />
+          } />}
 
         </Route>
 
         <Route element={<PrivateRouteModerator loginPageLink={loginPage.link} mainPageLink={mainPage.link} />}>
-          <Route path="/requests_moderator" element={
+          {user?.role === 'moderator' && <Route path="/requests" element={
             <RequestsModeratorPage setPage={getSetter(mainPage, requestsModeratorPage)} />
-          } />
+          } />}
 
           <Route path="/service/:id/update" element={
             <DataServiceModeratorPage setPage={getSetterTiltleLink(mainPage)} />
@@ -107,6 +111,13 @@ export const App = () => {
 
           <Route path="/service/new" element={
             <DataServiceNewModeratorPage mainPageLink={mainPage.link} setPage={getSetter(mainPage, dsModeratorNewPage)} />
+          } />
+
+          <Route path="/services_moderator" element={
+            <DataServiceListModeratorPage
+              setPage={getSetter(mainPage, dsModeratorTabele)}
+              moderatorNewDSPageLink={dsModeratorNewPage.link}
+            />
           } />
 
         </Route>

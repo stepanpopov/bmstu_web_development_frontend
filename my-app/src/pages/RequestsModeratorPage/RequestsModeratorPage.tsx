@@ -17,15 +17,23 @@ interface Props {
 }
 
 const RequestsModeratorPage = ({ setPage }: Props) => {
+    const POLLING_INTERVAL = 5000;
 
     const dispatch = useAppDispatch()
 
     const filters = useReqFilter()
 
+    useEffect(() => { setPage() }, [])
+
+    useEffect(() => { dispatch(filterReqs(filters)) }, [])
+
     useEffect(() => {
-        setPage()
-        dispatch(filterReqs(filters)) // !
-    }, [])
+        const intervalID = setInterval(() => {
+            dispatch(filterReqs(filters)) // !
+        }, POLLING_INTERVAL)
+
+        return () => clearInterval(intervalID)
+    }, [filters])
 
     // const draftReq = useDraft()
     const reqs = useOtherReqList()

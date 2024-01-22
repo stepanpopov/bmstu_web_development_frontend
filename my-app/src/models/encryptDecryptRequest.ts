@@ -1,7 +1,9 @@
 
 export const StatusTypes = ["draft", "formed", "finished", "rejected", "deleted"] as const
-
 export type Status = typeof StatusTypes[number];
+
+export const EncodingTypes = ['CRC', 'Hamming'] as const
+export type Encoding = typeof EncodingTypes[number];
 
 export const getStatusFromNumber = (num: number): Status => {
 
@@ -38,6 +40,16 @@ export const getStatusFromString = (str: string): Status | undefined => {
     }
 }
 
+export const getEncodingFromString = (str: string): Encoding => {
+    for (let i = 0; i < EncodingTypes.length; i++) {
+        if (EncodingTypes[i] === str) {
+            return EncodingTypes[i]
+        }
+    }
+
+    throw new Error(`Invalid encoding: ${str}`);
+}
+
 export default interface EncryptDecryptRequest {
     id: number
     status: Status
@@ -46,4 +58,5 @@ export default interface EncryptDecryptRequest {
     formDate?: number
     moderator?: string
     creator?: string
+    encoding?: Encoding
 }

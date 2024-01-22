@@ -1,10 +1,12 @@
 import './RequestCard.css'
-import { Card } from 'react-bootstrap';
+import { Card, Form } from 'react-bootstrap';
 
 import { useAppDispatch } from "../../store";
 import { formDraft } from '../../store/encryptDecryptRequestList'
 import Button from '../Button/Button.tsx';
-import Request from '../../models/encryptDecryptRequest.ts';
+import Request, { getEncodingFromString } from '../../models/encryptDecryptRequest.ts';
+import { EncodingTypes, Encoding } from '../../models/encryptDecryptRequest.ts';
+import { useState } from 'react';
 
 export interface Props {
     request: Request
@@ -13,6 +15,8 @@ export interface Props {
 const RequestCard = ({ request }: Props) => {
     const dispatch = useAppDispatch()
     const handleForm = () => dispatch(formDraft(request.id))
+
+    const [encoding, setEncoding] = useState<Encoding>('Hamming')
 
     return (
         <Card className="request_card">
@@ -24,9 +28,17 @@ const RequestCard = ({ request }: Props) => {
                 {request.formDate && <Card.Text>Дата формированвия заявки: {new Date(request.formDate).toString()}</Card.Text>}
                 {request.finishDate && <Card.Text>Дата завершения заявки: {new Date(request.finishDate).toString()}</Card.Text>}
                 {request.status === "draft" &&
-                    <Button
-                        text={'Cформировать'}
-                        onClick={handleForm} />}
+                    <>
+                        <Form.Select value={encoding} onChange={(e) => setEncoding(getEncodingFromString(e.target.value))} aria-label="Default select example">
+                            {EncodingTypes.map((encType) => (
+                                <option>{encType}</option>
+                            ))}
+                        </Form.Select>
+                        <Button
+                            text={'Cформировать'}
+                            onClick={handleForm} />
+                    </>
+                }
             </Card.Body>
         </Card>
     );

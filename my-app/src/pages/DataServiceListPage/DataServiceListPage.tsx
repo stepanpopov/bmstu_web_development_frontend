@@ -1,31 +1,40 @@
 import DataServiceList from "../../components/DataServiceList/DataServiceList.tsx";
-import { Container, Row } from 'react-bootstrap';
+import { Container, Row, Button, Image, Col } from 'react-bootstrap';
 import InputFilter from '../../components/InputFilter/InputFilter.tsx';
 import { useEffect, useState } from 'react';
 import { SetPage } from "../../models/common.ts";
 import { ToastContainer, toast } from "react-toastify";
 import { dataServiceListActions, useError, useSuccessAddToDraft } from "../../store/dataServiceList";
 import { useAppDispatch } from "../../store";
-import MyButton from "../../components/Button/Button.tsx";
 import { useNavigate } from "react-router-dom";
+import { useDraftID } from "../../store/encryptDecryptRequestList/selectors.ts";
 import { useUser } from "../../store/user/selectors.ts";
 
 interface Props {
     setPage: SetPage
-    moderatorNewDSPageLink: string
+    requestsPageLink: string
 }
 
-const DataServiceListPage = ({ setPage, moderatorNewDSPageLink }: Props) => {
+const draftImg = new URL('/draft.png', import.meta.url).href
+
+const DataServiceListPage = ({ setPage, requestsPageLink }: Props) => {
     useEffect(() => {
         setPage()
     }, [])
+
+    const navigate = useNavigate()
 
     const [searchValue, setSearchValue] = useState('')
     const dispatch = useAppDispatch()
     const error = useError()
     const successAddToDraft = useSuccessAddToDraft()
-    const navigate = useNavigate()
+
     const user = useUser()
+
+    const draftID = useDraftID()
+    const draftActive = !!draftID;
+
+    const onDraftClick = () => (navigate(`${requestsPageLink}/${draftID}`))
 
     useEffect(() => {
 
@@ -44,16 +53,20 @@ const DataServiceListPage = ({ setPage, moderatorNewDSPageLink }: Props) => {
 
     return (
         <Container>
-            <Container>
-                <ToastContainer position="top-center" newestOnTop={false} />
-                <Row className="justify-content-md-center">
+            {/* <Container> */}
+            <ToastContainer position="top-center" newestOnTop={false} />
+            <Row style={{ display: "flex", margin: "1% 0% 1% 0%", justifyContent: "center" }}>
+                <Col lg={5}>
                     <InputFilter searchValue={searchValue} setSearchValue={setSearchValue} />
-                    {user?.role === 'moderator' &&
-                        <MyButton text='Добавить новую услугу' onClick={() => (navigate(moderatorNewDSPageLink))} />
-                    }
-                </Row>
-                <DataServiceList searchValue={searchValue} />
-            </Container>
+                </Col>
+                <Col lg={2}>
+                    <Button variant="outline-warning" onClick={onDraftClick} disabled={!draftActive || !user} >
+                        <Image src={draftImg} style={{ maxWidth: '10%', maxHeight: '10%' }} />
+                    </Button>
+                </Col>
+            </Row>
+            <DataServiceList searchValue={searchValue} />
+            {/* </Container> */}
         </Container>
     );
 };

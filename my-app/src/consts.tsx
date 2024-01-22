@@ -23,9 +23,11 @@ export const mainPage: Page = { link: '/', title: 'Данные для шифр�
 export const loginPage: Page = { link: '/login', title: 'Войти' }
 export const registerPage: Page = { link: '/register', title: 'Регистрация' }
 export const requestsPage: Page = { link: '/requests', title: 'Запросы на шифрование' }
-export const requestsModeratorPage: Page = { link: '/requests_moderator', title: 'Управление шифрованием' }
+export const requestsModeratorPage: Page = { link: '/requests', title: 'Управление шифрованием' }
 export const dsModeratorPage: Page = { link: '/service/:id/update', title: 'Изменение данных' }
 export const dsModeratorNewPage: Page = { link: '/service/new', title: 'Добавление новых данных' }
+export const dsModeratorTabele: Page = { link: '/services_moderator', title: 'Управление данными' }
+
 
 export const navTitle = 'ШИФРОВАНИЕ КОДОМ ДЛЯ КОРРЕКЦИИ ОШИБОК';
 export const footerTitle = '2023 ШИФРОВАННЯ/ДЕШИФРОВАННЯ ДЛЯ БУДЬ-КОГО СВІТУ 2023'

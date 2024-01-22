@@ -1,4 +1,4 @@
-import { Button, Col, Row, Image } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,7 +6,6 @@ import { useUser, useLoading } from '../../store/user'
 import { useAppDispatch } from "../../store";
 import { logout } from '../../store/user'
 
-import { useDraftID } from '../../store/encryptDecryptRequestList'
 
 import './Navbar.css'
 import { useEffect } from 'react';
@@ -19,11 +18,10 @@ interface NavbarProps {
   registerPageLink: string,
   requestsPageLink: string,
   requestsModeratorPageLink: string,
+  servicesModeratorPageLink: string,
 }
 
-const draftImg = new URL('/draft.png', import.meta.url).href
-
-const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, requestsPageLink, requestsModeratorPageLink }: NavbarProps) => {
+const MyNavbar = ({ title, mainPageLink, servicesModeratorPageLink, loginPageLink, registerPageLink, requestsPageLink, requestsModeratorPageLink }: NavbarProps) => {
   const navigate = useNavigate()
 
   const dispatch = useAppDispatch()
@@ -33,10 +31,7 @@ const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, reques
     // dispatch(filterReqs({}))
 
   }, [])
-  const draftID = useDraftID()
-  const draftActive = !!draftID;
 
-  const onDraftClick = () => (navigate(`${requestsPageLink}/${draftID}`))
 
   const logoutHandler = () => {
     dispatch(logout())
@@ -58,6 +53,8 @@ const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, reques
     navigate(requestsModeratorPageLink)
   }
 
+  const servicesModeratorHandler = () => navigate(servicesModeratorPageLink)
+
   const loading = useLoading()
   if (loading) {
     return <Loader />
@@ -72,18 +69,21 @@ const MyNavbar = ({ title, mainPageLink, loginPageLink, registerPageLink, reques
               {title}
             </Link>
           </Col>
-          <Col lg="2">
+          {user?.role === 'user' && <Col lg="2">
             <Button variant="outline-warning" onClick={requestsHandler} disabled={!user} >Шифрование кодом Хэмминга</Button>
-          </Col>
+          </Col>}
           {user?.role === 'moderator' &&
-            <Col lg="1">
-              <Button variant="outline-warning" onClick={requestsModeratorHandler}> Управление шифрованием </Button>
-            </Col>
+            <>
+              <Col lg="1">
+                <Button variant="outline-warning" onClick={requestsModeratorHandler}> Управление шифрованием </Button>
+              </Col>
+              <Col lg="1">
+                <Button variant="outline-warning" onClick={servicesModeratorHandler}> Управление данными </Button>
+              </Col>
+            </>
           }
           <Col lg="1">
-            <Button variant="outline-warning" onClick={onDraftClick} disabled={!draftActive || !user} >
-              <Image src={draftImg} style={{ maxWidth: '30%', maxHeight: '30%' }} />
-            </Button>
+
           </Col>
           {user ?
             <>

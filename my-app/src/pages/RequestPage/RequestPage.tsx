@@ -23,8 +23,6 @@ const RequestPage = ({ setPage }: Props) => {
 
     const dispatch = useAppDispatch()
 
-
-
     useEffect(() => {
         dispatch(getReqByID(requestID))
     }, [requestID])
