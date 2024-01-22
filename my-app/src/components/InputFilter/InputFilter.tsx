@@ -7,7 +7,7 @@ interface InputProps {
 
 const InputFilter = ({searchValue, setSearchValue}: InputProps) => (
     <div className="search">
-        <input value={searchValue} onChange={(event => setSearchValue(event.target.value))}/>
+        <input style={{width: '50%'}} placeholder='Начните вводить название услуги' value={searchValue} onChange={(event => setSearchValue(event.target.value))}/>
     </div>
 )
 

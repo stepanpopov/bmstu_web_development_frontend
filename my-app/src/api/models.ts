@@ -5,6 +5,8 @@ export interface RawDataService {
     blob: string,
     active: boolean,
     image_url: string,
+    result: string | null,
+    success: boolean | null,
 }
 
 export interface RawEncryptDecryptRequst {
@@ -15,4 +17,6 @@ export interface RawEncryptDecryptRequst {
     FormDate:       string | null
     Moderator:      string | null
     Creator:        string | null
+    EncodingType:   string | null
+    ResultCounter:  number | null
 }

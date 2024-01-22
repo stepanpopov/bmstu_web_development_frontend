@@ -8,14 +8,35 @@ import { Container } from 'react-bootstrap';
 import Button from '../../components/Button/Button';
 import DataServiceCard from '../../components/DataServiceCard/DataServiceCard';
 import RequestCard from '../../components/RequestCard/RequestCard';
+import { useUser } from '../../store/user';
+import DataService from '../../models/dataService';
+import { Status } from '../../models/encryptDecryptRequest';
 
 interface Props {
     setPage: SetPageTitleLink
 }
 
+const convertStatusToView = (st: Status) => {
+    switch (st) {
+        case 'draft':
+            return 'Черновик'
+        case "deleted":
+            return "Удалена";
+        case "formed":
+            return "Сформирована";
+        case "finished":
+            return "Завершена";
+        case "rejected":
+            return "Отклонена";
+        default:
+            return undefined
+    }
+}
+
 const RequestPage = ({ setPage }: Props) => {
     const { id } = useParams<{ id: string }>();
     const requestID = parseInt(id!)
+    const user = useUser()
 
     useEffect(() => {
         setPage(`/requests/${id}`, `Заявка ${id}`)
@@ -39,6 +60,9 @@ const RequestPage = ({ setPage }: Props) => {
         return <Loader />
     }
 
+    const showRes = (ds: DataService) => ds.active && ((user?.role === 'user' && request.status === 'finished') || 
+        (user?.role === 'moderator' && (request.status === 'finished' || request.status === 'deleted' || request.status === 'formed')))
+
     return (
         <>
             <RequestCard request={request} />
@@ -50,7 +74,16 @@ const RequestPage = ({ setPage }: Props) => {
                                 ds={ds}
                                 imgStyle={{ width: '30%', height: '30%', marginLeft: 'auto', marginRight: 'auto', display: 'block' }}
                                 childButton={childButtonDS(request.status === "draft", ds.id)}
-                            />
+                            >
+                                {showRes(ds) ? 
+                                <>
+                                    <div> </div>
+                                    {ds.success && <div style={{fontWeight: 800 }}>Результат:</div>}
+                                    <div>{ds.result}</div>
+                                    <div style={{fontWeight: 800 }}>Успех: {ds.success ? 'Да' : 'Нет'}</div>
+                                </> : undefined
+                                }
+                            </DataServiceCard>
                         </>
                     ))
                 }

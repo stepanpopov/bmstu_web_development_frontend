@@ -1,6 +1,6 @@
 import { DOMAIN, requestTime, JWT_TOKEN_COOKIE } from "../../consts"
 import axios from "axios";
-import EncryptDecryptRequest, { Status, getStatusFromNumber } from "../../models/encryptDecryptRequest"
+import EncryptDecryptRequest, { Status, getEncodingFromString, getStatusFromNumber } from "../../models/encryptDecryptRequest"
 import Cookies from "js-cookie";
 import { RawEncryptDecryptRequst } from '../models'
 
@@ -68,6 +68,8 @@ export const fetchFilterReqs = async ({ status, startDate, endDate }: FilterReqA
         formDate: (r.FormDate === null ? undefined : new Date(r.FormDate).getTime()),
         moderator: (r.Moderator === null ? undefined : r.Moderator),
         creator: (r.Creator === null ? undefined : r.Creator),
+        encoding: (r.EncodingType === null ? undefined : getEncodingFromString(r.EncodingType)),
+        resultCounter: (r.ResultCounter === null ? undefined : r.ResultCounter)
     }))
     return req
 }

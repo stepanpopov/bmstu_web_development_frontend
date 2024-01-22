@@ -10,6 +10,7 @@ export interface DataServiceCardProps {
     onClick?: (id: number) => void,
     childButton?: JSX.Element
     imgStyle?: React.CSSProperties
+    children?: JSX.Element
 }
 
 const handlerImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -17,7 +18,7 @@ const handlerImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = img;
 }
 
-const DataServiceCard = ({ ds, onClick, imgStyle, childButton }: DataServiceCardProps) => {
+const DataServiceCard = ({ ds, onClick, imgStyle, childButton, children }: DataServiceCardProps) => {
 
     let onClickHandler = undefined;
     if (onClick) {
@@ -27,21 +28,22 @@ const DataServiceCard = ({ ds, onClick, imgStyle, childButton }: DataServiceCard
     const imgCurStyle = imgStyle ?? { width: '100%', height: '100%' };
 
     return (
-        <Card className="card">
+        <Card className="card" style={{width: '70', height: '70'}}>
             {ds.active ?
-                <Container>
+                <>
                     <Card.Img src={ds.image} alt='' style={imgCurStyle} onError={handlerImgError} />
-                    <Card.ImgOverlay>
-                        <Card.Body>
+                    <Card.ImgOverlay style={{width: '70', height: '70'}} >
+                        <Card.Body style={{width: '70', height: '70'}}>
                             <div onClick={onClickHandler}>
-                                <Card.Title className='card_title'>{ds.name}</Card.Title>
+                                <Card.Title >{ds.name}</Card.Title>
                                 <div className='card_id'>  ID: {ds.id} </div>
                                 <div style={{ width: '100%' }}>{ds.blob}</div>
                             </div>
+                            {children}
                             {childButton}
                         </Card.Body>
                     </Card.ImgOverlay>
-                </Container>
+                </>
                 :
                 <h2>Данные удалены</h2>
             }

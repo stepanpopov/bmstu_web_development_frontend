@@ -1,5 +1,5 @@
 .breadcrumb-not-active {
-    color: #cccccc;
+    color: #acacac;
     font-size: 130%;
 }
   
@@ -11,4 +11,14 @@
 .breadcrumb-arrow {
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.breadcrumbs {
+    border-radius: 15px;
+    box-shadow: 0 4px 30px -10px rgba(0, 0, 0, 0.2);
+    width: fit-content;
+    background: rgb(202, 232, 202);
+    padding: 10px 24px;
+    display: flex;
+    margin-top: 1%;
 }

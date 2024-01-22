@@ -10,7 +10,7 @@ const Breadcrumbs = ({ pages }: BreadcrumbsProps) => {
   const location = useLocation();
 
   return (
-      <nav>
+      <nav style={{marginBottom: '2%'}} className="breadcrumbs">
           {
             pages.map((p: Page) => (
                 <Link to={p.link}

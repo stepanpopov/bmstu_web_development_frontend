@@ -66,10 +66,10 @@ const DataServiceListPage = ({ setPage, moderatorNewDSPageLink }: Props) => {
                         <MyButton text='Добавить новую услугу' onClick={() => (navigate(moderatorNewDSPageLink))} />
                     }
                 </Row>
-                <Table striped bordered hover>
+                <Table striped bordered hover style={{marginBottom: '10%', marginTop: '3%'}}>
                     <thead>
                         <tr>
-                            <th>Изображение</th>
+                            <th  style={{ width: '20%', height: '20%' }} >Изображение</th>
                             <th>Название</th>
                             <th>Данные</th>
                             <th>Шифрование/расшифрование</th>
@@ -79,7 +79,7 @@ const DataServiceListPage = ({ setPage, moderatorNewDSPageLink }: Props) => {
                     <tbody>
                         {dataServices.map((ds) => (
                             <tr key={ds.id}>
-                                <td><Image src={ds.image} alt='' style={{ width: '40%', height: '40%' }} onError={handlerImgError} /> </td>
+                                <td><Image src={ds.image} alt='' style={{ width: '70%', height: '70%' }} onError={handlerImgError} /> </td>
                                 <td>{ds.name}</td>
                                 <td>{ds.blob}</td>
                                 <td>{ds.encode ? 'Данные зашифрованы' : 'Данные в исходном виде'}</td>

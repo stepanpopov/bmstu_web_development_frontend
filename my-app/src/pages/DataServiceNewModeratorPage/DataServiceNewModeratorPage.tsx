@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface Props {
     setPage: SetPage,
-    mainPageLink: string,
+    servicesPageLink: string
 }
 
 const img = new URL('/binary.png', import.meta.url).href
@@ -21,7 +21,7 @@ const handlerImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = img;
 }
 
-const DataServiceNewModeratorPage = ({ setPage, mainPageLink }: Props) => {
+const DataServiceNewModeratorPage = ({ setPage, servicesPageLink }: Props) => {
     const navigate = useNavigate()
 
     const dispatch = useAppDispatch()
@@ -46,7 +46,7 @@ const DataServiceNewModeratorPage = ({ setPage, mainPageLink }: Props) => {
         } else {
             dispatch(createDS({ encode, name, blob }))
         }
-        navigate(mainPageLink)
+        navigate(servicesPageLink)
     }
 
     const onCancelClick = () => {
@@ -54,6 +54,7 @@ const DataServiceNewModeratorPage = ({ setPage, mainPageLink }: Props) => {
         setName("")
         setBlob("")
         setCover(null)
+        navigate(servicesPageLink)
     }
 
     const handleSelectedFile = (event: ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +75,7 @@ const DataServiceNewModeratorPage = ({ setPage, mainPageLink }: Props) => {
     console.log(cover)
 
     return (
-        <Container>
+        <Container style={{marginBottom: '10%'}}>
             <Form >
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                     <Form.Label>Название</Form.Label>

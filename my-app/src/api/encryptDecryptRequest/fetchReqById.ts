@@ -1,6 +1,6 @@
 import { DOMAIN, requestTime, JWT_TOKEN_COOKIE } from "../../consts"
 import axios from "axios";
-import EncryptDecryptRequest, { getStatusFromNumber } from "../../models/encryptDecryptRequest"
+import EncryptDecryptRequest, { getEncodingFromString, getStatusFromNumber } from "../../models/encryptDecryptRequest"
 import Cookies from "js-cookie";
 import { RawEncryptDecryptRequst, RawDataService } from '../models'
 import DataService from "../../models/dataService";
@@ -30,6 +30,8 @@ export const fetchReqByID = async (id: number): Promise<[EncryptDecryptRequest, 
         image: ds.image_url,
         encode: ds.encode,
         active: ds.active,
+        result: (ds.result === null ? undefined : ds.result),
+        success: (ds.success === null ? undefined : ds.success)
     }))
 
     const r = resp.data.encDecReq
@@ -41,6 +43,7 @@ export const fetchReqByID = async (id: number): Promise<[EncryptDecryptRequest, 
         formDate: (r.FormDate === null ? undefined : new Date(r.FormDate).getTime()),
         moderator: (r.Moderator === null ? undefined : r.Moderator),
         creator: (r.Creator === null ? undefined : r.Creator),
+        encoding: (r.EncodingType === null ? undefined : getEncodingFromString(r.EncodingType)),
     }
 
     return [req, dsList]

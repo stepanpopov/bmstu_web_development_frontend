@@ -4,5 +4,7 @@ export default interface DataService {
     blob: string,
     image?: string,
     encode: boolean,
-    active: boolean
+    active: boolean,
+    result?: string,
+    success?: boolean,
 }

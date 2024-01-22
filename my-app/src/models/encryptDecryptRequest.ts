@@ -47,7 +47,8 @@ export const getEncodingFromString = (str: string): Encoding => {
         }
     }
 
-    throw new Error(`Invalid encoding: ${str}`);
+    // throw new Error(`Invalid encoding: ${str}`);
+    return EncodingTypes[0]
 }
 
 export default interface EncryptDecryptRequest {
@@ -59,4 +60,5 @@ export default interface EncryptDecryptRequest {
     moderator?: string
     creator?: string
     encoding?: Encoding
+    resultCounter?: number
 }

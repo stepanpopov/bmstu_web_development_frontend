@@ -5,7 +5,7 @@ import { fetchDeleteFromDraft } from '../../api/dataService'
 
 export { type FilterReqArgs } from '../../api/encryptDecryptRequest'
 
-import EncryptDecryptRequst from '../../models/encryptDecryptRequest';
+import EncryptDecryptRequst, { Encoding } from '../../models/encryptDecryptRequest';
 import DataService from '../../models/dataService';
 import { RootState } from '../types';
 import { Filter } from './slice';
@@ -68,9 +68,14 @@ export const removeFromDraft = createAsyncThunk<void, number, { state: RootState
     }
 )
 
-export const formDraft = createAsyncThunk<void, number, { state: RootState }>(
+interface FormDraft {
+    id: number,
+    encodingType: Encoding
+}
+
+export const formDraft = createAsyncThunk<void, FormDraft, { state: RootState }>(
     'encryptDecryptRequestList/formDraft',
-    async (id, { getState }) => {
+    async (arg, { getState }) => {
         const { draftID } = getState().enqDeqReqList
 
         if (!draftID) {
@@ -82,7 +87,7 @@ export const formDraft = createAsyncThunk<void, number, { state: RootState }>(
             throw new Error("draft не установлен")
         }
 
-        await fetchFormDraft(id)
+        await fetchFormDraft(arg.id, arg.encodingType)
     }
 )
 

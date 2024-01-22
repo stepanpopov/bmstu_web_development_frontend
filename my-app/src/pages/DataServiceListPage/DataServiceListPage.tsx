@@ -55,13 +55,14 @@ const DataServiceListPage = ({ setPage, requestsPageLink }: Props) => {
         <Container>
             {/* <Container> */}
             <ToastContainer position="top-center" newestOnTop={false} />
-            <Row style={{ display: "flex", margin: "1% 0% 1% 0%", justifyContent: "center" }}>
-                <Col lg={5}>
+            <Row style={{ display: "flex", margin: "1% 0% 1% 0%", justifyContent: "start" }}>
+                <Col lg={10}>
                     <InputFilter searchValue={searchValue} setSearchValue={setSearchValue} />
                 </Col>
                 <Col lg={2}>
                     <Button variant="outline-warning" onClick={onDraftClick} disabled={!draftActive || !user} >
-                        <Image src={draftImg} style={{ maxWidth: '10%', maxHeight: '10%' }} />
+                        {/* <Image src={draftImg} style={{ maxWidth: '10%', maxHeight: '10%' }} /> */}
+                        Корзина
                     </Button>
                 </Col>
             </Row>

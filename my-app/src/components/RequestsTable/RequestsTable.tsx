@@ -1,6 +1,6 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
-import Request from "../../models/encryptDecryptRequest";
+import { Container, Table } from 'react-bootstrap';
+import Request, { Status } from "../../models/encryptDecryptRequest";
 import Button from '../Button/Button.tsx';
 
 import './RequestsTable.css';
@@ -13,8 +13,25 @@ interface Props {
     isModerator?: boolean
 }
 
+const convertStatusToView = (st: Status) => {
+    switch (st) {
+        case 'draft':
+            return 'Черновик'
+        case "deleted":
+            return "Удалена";
+        case "formed":
+            return "Сформирована";
+        case "finished":
+            return "Завершена";
+        case "rejected":
+            return "Отклонена";
+        default:
+            return undefined
+    }
+}
+
 const convertNumDateToView = (date: number | undefined) => {
-    return date ? new Date(date).toString() : '';
+    return date ? new Date(date).toLocaleString() : '';
 }
 
 const RequestsTable = ({ requests, isModerator }: Props) => {
@@ -26,7 +43,7 @@ const RequestsTable = ({ requests, isModerator }: Props) => {
     const onRejectClick = (id: number) => () => (dispatch(updateModeratorReq({ id, action: 'reject' })))
 
     return (
-        <Table striped bordered hover>
+        <Table striped bordered hover style={{marginBottom: '10%', marginTop: '3%'}}>
             <thead>
                 <tr>
                     <th>Номер заявки</th>
@@ -35,7 +52,10 @@ const RequestsTable = ({ requests, isModerator }: Props) => {
                     <th>Время создания</th>
                     <th>Время формирования</th>
                     <th>Время завершения</th>
+                    <th>Код исправления ошибок</th>
+                    <th>Посчитанные результаты</th>
                     <th></th>
+                    <th style={{width: '100%'}}></th>
                 </tr>
             </thead>
             <tbody>
@@ -43,16 +63,18 @@ const RequestsTable = ({ requests, isModerator }: Props) => {
                     <tr key={req.id}>
                         <td>{req.id}</td>
                         {isModerator && <td>{req.creator}</td>}
-                        <td>{req.status}</td>
+                        <td>{convertStatusToView(req.status)}</td>
                         <td>{convertNumDateToView(req.creationDate)}</td>
                         <td>{convertNumDateToView(req.formDate)}</td>
                         <td>{convertNumDateToView(req.finishDate)}</td>
+                        <td>{req.encoding}</td>
+                        <td>{req.resultCounter}</td>
                         <td><Button text='Подробнее' onClick={handleKnowMoreButtonClick(req.id)} /> </td>
                         {isModerator && req.status === 'formed' &&
-                            <>
-                                <td><Button text='Подтвердить' onClick={onFinishClick(req.id)} /> </td>
-                                <td><Button text='Отменить' onClick={onRejectClick(req.id)} /> </td>
-                            </>
+                            <Container>
+                                <Button text='Подтвердить' onClick={onFinishClick(req.id)} /> 
+                                <Button text='Отменить' onClick={onRejectClick(req.id)} />
+                            </Container>
                         }
                     </tr>
                 ))}

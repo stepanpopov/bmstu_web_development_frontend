@@ -21,7 +21,7 @@ import Footer from './components/Footer/Footer.tsx';
 import BreadCrumbs from './components/BreadCrumbs/BreadCrumbs.tsx';
 import { PrivateRouteModerator, PrivateRouteUser } from './components/PrivateRoute/PrivateRoute.tsx';
 
-import { mainPage, loginPage, registerPage, requestsPage, requestsModeratorPage, navTitle, footerTitle, dsModeratorNewPage, dsModeratorTabele } from './consts.tsx';
+import { mainPage, loginPage, registerPage, requestsPage, requestsModeratorPage, navTitle, footerTitle, dsModeratorNewPage, dsModeratorTabele, dsModeratorPage } from './consts.tsx';
 
 import { useAppDispatch } from "./store";
 import { useLoading, useUser } from './store/user'
@@ -106,11 +106,11 @@ export const App = () => {
           } />}
 
           <Route path="/service/:id/update" element={
-            <DataServiceModeratorPage setPage={getSetterTiltleLink(mainPage)} />
+            <DataServiceModeratorPage setPage={getSetterTiltleLink(mainPage)} servicesPageLink={dsModeratorTabele.link} />
           } />
 
           <Route path="/service/new" element={
-            <DataServiceNewModeratorPage mainPageLink={mainPage.link} setPage={getSetter(mainPage, dsModeratorNewPage)} />
+            <DataServiceNewModeratorPage setPage={getSetter(mainPage, dsModeratorNewPage)} servicesPageLink={dsModeratorTabele.link} />
           } />
 
           <Route path="/services_moderator" element={

@@ -63,47 +63,44 @@ const MyNavbar = ({ title, mainPageLink, servicesModeratorPageLink, loginPageLin
   return (
     <Navbar expand="lg">
       <Container fluid style={{ width: "100%" }}>
-        <Row style={{ display: "flex", width: "100%", margin: "1% 0% 1% 0%", justifyContent: "center" }}>
-          <Col lg="3" className='navbar_title'>
+        <Row style={{ display: "flex", width: "100%", margin: "1% 0% 1% 0%", justifyContent: "start" }} className="align-items-end">
+          <Col lg={user ? 3 : 8} className='navbar_title'>
             <Link to={mainPageLink} className='link'>
               {title}
             </Link>
           </Col>
-          {user?.role === 'user' && <Col lg="2">
+          {user?.role === 'user' && <Col lg="5">
             <Button variant="outline-warning" onClick={requestsHandler} disabled={!user} >Шифрование кодом Хэмминга</Button>
           </Col>}
           {user?.role === 'moderator' &&
-            <>
-              <Col lg="1">
+              <Col lg="2">
                 <Button variant="outline-warning" onClick={requestsModeratorHandler}> Управление шифрованием </Button>
-              </Col>
-              <Col lg="1">
+              </Col>}
+          {user?.role === 'moderator' &&
+              <Col lg="3">
                 <Button variant="outline-warning" onClick={servicesModeratorHandler}> Управление данными </Button>
-              </Col>
-            </>
-          }
-          <Col lg="1">
+              </Col>}
+  
+          {user &&
+             <Col lg="1" className="ml-auto">
+             {user.login}
+           </Col> }
 
-          </Col>
-          {user ?
-            <>
-              <Col lg="1" >
-                {user.login}
-              </Col>
-              <Col lg="2">
-                <Button variant="outline-warning" onClick={logoutHandler} >Выйти</Button>
-              </Col>
-            </>
-            :
-            <>
-              <Col lg="1">
-                <Button variant="outline-warning" onClick={loginHandler} >Войти</Button>
-              </Col>
-              <Col lg="2">
-                <Button variant="outline-warning" onClick={registerHandler} >Зарегистрироваться</Button>
-              </Col>
-            </>
+          {user &&
+             <Col lg="2" className="ml-auto">
+              <Button variant="outline-warning" onClick={logoutHandler} >Выйти</Button>
+           </Col>
           }
+
+          { !user &&
+              <Col lg="1" className="align-self-end">
+                <Button variant="outline-warning" onClick={loginHandler} >Войти</Button>
+              </Col> }
+
+          { !user &&
+              <Col className="align-self-end">
+                <Button variant="outline-warning" onClick={registerHandler} >Зарегистрироваться</Button>
+              </Col> }
         </Row>
       </Container>
     </Navbar>

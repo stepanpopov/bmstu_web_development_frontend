@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SetPage } from '../../models/common.ts';
 
 import { useAppDispatch } from "../../store";
-import { enqDeqReqListActions, useError, filterReqs } from '../../store/encryptDecryptRequestList'
+import { enqDeqReqListActions, useError, filterReqs, filterReqsModerator } from '../../store/encryptDecryptRequestList'
 import RequestsInputFilter from '../../components/RequestsInputFilter/RequestsInputFilter.tsx';
 import { useOtherReqList, useReqFilter } from '../../store/encryptDecryptRequestList/selectors.ts';
 
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const RequestsModeratorPage = ({ setPage }: Props) => {
-    const POLLING_INTERVAL = 5000;
+    const POLLING_INTERVAL = 1000;
 
     const dispatch = useAppDispatch()
 
@@ -25,11 +25,11 @@ const RequestsModeratorPage = ({ setPage }: Props) => {
 
     useEffect(() => { setPage() }, [])
 
-    useEffect(() => { dispatch(filterReqs(filters)) }, [])
+    useEffect(() => { dispatch(filterReqsModerator(filters)) }, [])
 
     useEffect(() => {
         const intervalID = setInterval(() => {
-            dispatch(filterReqs(filters)) // !
+            dispatch(filterReqsModerator(filters)) // !
         }, POLLING_INTERVAL)
 
         return () => clearInterval(intervalID)

@@ -1,4 +1,4 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Container, Form, Image } from 'react-bootstrap';
 import { Loader } from '../../components/Loader/Loader.tsx'
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -11,6 +11,7 @@ import Button from '../../components/Button/Button.tsx';
 
 interface Props {
     setPage: SetPageTitleLink
+    servicesPageLink: string
 }
 
 const img = new URL('/binary.png', import.meta.url).href
@@ -20,8 +21,9 @@ const handlerImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = img;
 }
 
-const DataServiceModeratorPage = ({ setPage }: Props) => {
+const DataServiceModeratorPage = ({ setPage, servicesPageLink }: Props) => {
     const location = useLocation()
+    const navigate = useNavigate()
 
     const { id } = useParams()
     // handle not convertable id
@@ -63,6 +65,7 @@ const DataServiceModeratorPage = ({ setPage }: Props) => {
         if (cover) {
             dispatch(updateCoverDS({ id: ds.id, cover }))
         }
+        navigate(servicesPageLink)
     }
 
     const onCancelClick = () => {
@@ -70,6 +73,7 @@ const DataServiceModeratorPage = ({ setPage }: Props) => {
         setName(ds?.name ?? '')
         setBlob(ds?.blob ?? '')
         setCover(null)
+        navigate(servicesPageLink)
     }
 
     const handleSelectedFile = (event: ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +97,7 @@ const DataServiceModeratorPage = ({ setPage }: Props) => {
     }
 
     return (
-        <Container>
+        <Container style={{marginBottom: '10%'}}>
             <Form >
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                     <Form.Label>Название</Form.Label>
