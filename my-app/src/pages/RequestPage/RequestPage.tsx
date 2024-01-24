@@ -66,13 +66,14 @@ const RequestPage = ({ setPage }: Props) => {
     return (
         <>
             <RequestCard request={request} />
-            <Container className={'cards'}>
+            <Container style={{ marginLeft: '0', marginRight: '0' }} className='cards'>
                 {
                     dsList.filter((ds) => (ds.active)).map((ds) => (
                         <>
                             <DataServiceCard
+                                cardStyle={{width: '100%', height: '30rem'}}
                                 ds={ds}
-                                imgStyle={{ width: '30%', height: '30%', marginLeft: 'auto', marginRight: 'auto', display: 'block' }}
+                                // imgStyle={{ width: '30%', height: '30%', marginLeft: 'auto', marginRight: 'auto', display: 'block' }}
                                 childButton={childButtonDS(request.status === "draft", ds.id)}
                             >
                                 {showRes(ds) ? 

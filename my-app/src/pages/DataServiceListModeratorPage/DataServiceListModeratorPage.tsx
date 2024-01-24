@@ -1,4 +1,4 @@
-import { Container, Row, Image, Table } from 'react-bootstrap';
+import { Container, Row, Image, Table, Col } from 'react-bootstrap';
 import InputFilter from '../../components/InputFilter/InputFilter.tsx';
 import { useEffect, useState } from 'react';
 import { SetPage } from "../../models/common.ts";
@@ -61,15 +61,19 @@ const DataServiceListPage = ({ setPage, moderatorNewDSPageLink }: Props) => {
             <Container>
                 <ToastContainer position="top-center" newestOnTop={false} />
                 <Row className="justify-content-md-center">
-                    <InputFilter searchValue={searchValue} setSearchValue={setSearchValue} />
+                    <Col>
+                        <InputFilter searchValue={searchValue} setSearchValue={setSearchValue} />
+                    </Col>
+                    <Col lg={3}>
                     {user?.role === 'moderator' &&
-                        <MyButton text='Добавить новую услугу' onClick={() => (navigate(moderatorNewDSPageLink))} />
+                        <MyButton className="w-100" text='Добавить новую услугу' onClick={() => (navigate(moderatorNewDSPageLink))} />
                     }
+                    </Col>
                 </Row>
-                <Table striped bordered hover style={{marginBottom: '10%', marginTop: '3%'}}>
+                <Table striped bordered hover style={{marginBottom: '3%', marginTop: '3%'}}>
                     <thead>
                         <tr>
-                            <th  style={{ width: '20%', height: '20%' }} >Изображение</th>
+                            <th  style={{ width: '20%', height: '20%', maxWidth: '20%', maxHeight: '20%' }} >Изображение</th>
                             <th>Название</th>
                             <th>Данные</th>
                             <th>Шифрование/расшифрование</th>
@@ -83,11 +87,19 @@ const DataServiceListPage = ({ setPage, moderatorNewDSPageLink }: Props) => {
                                 <td>{ds.name}</td>
                                 <td>{ds.blob}</td>
                                 <td>{ds.encode ? 'Данные зашифрованы' : 'Данные в исходном виде'}</td>
-                                <td>
-                                    <>
-                                        <Button text={'Редактировать'} onClick={() => (navigate(`/service/${ds.id}/update`, { state: { title: ds.name } }))} />
-                                        <Button text={'Удалить'} onClick={handleRemove(ds.id)} />
-                                    </>
+                                <td className='text-center'>
+                                    <Container>
+                                        <Row>
+                                            <Col>
+                                                <Button className="w-100 mt-2 mb-2" text={'Редактировать'} onClick={() => (navigate(`/service/${ds.id}/update`, { state: { title: ds.name } }))} />
+                                            </Col>      
+                                        </Row>
+                                        <Row>
+                                            <Col>
+                                                <Button className="w-100 mt-2 mb-2" variant='outline-dark' text={'Удалить'} onClick={handleRemove(ds.id)} />
+                                            </Col>
+                                        </Row>
+                                    </ Container >
                                 </td>
                             </tr>
                         ))}

@@ -1,5 +1,5 @@
 import './RequestCard.css'
-import { Card, Form } from 'react-bootstrap';
+import { Card, Col, Form, Row } from 'react-bootstrap';
 
 import { useAppDispatch } from "../../store";
 import { formDraft } from '../../store/encryptDecryptRequestList'
@@ -57,14 +57,23 @@ const RequestCard = ({ request }: Props) => {
                 {request.finishDate && <Card.Text>Дата завершения заявки: {convertNumDateToView(request.finishDate)}</Card.Text>}
                 {request.status === "draft" &&
                     <>
-                        <Form.Select value={encoding} onChange={(e) => setEncoding(getEncodingFromString(e.target.value))} aria-label="Default select example">
-                            {EncodingTypes.map((encType) => (
-                                <option>{encType}</option>
-                            ))}
-                        </Form.Select>
-                        <Button
-                            text={'Cформировать'}
-                            onClick={handleForm} />
+                        <Row>
+                            <Col lg={4}>
+                                <Form.Select value={encoding} onChange={(e) => setEncoding(getEncodingFromString(e.target.value))} className='w-20'>
+                                    {EncodingTypes.map((encType) => (
+                                        <option>{encType}</option>
+                                    ))}
+                                </Form.Select>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Button
+                                className='w-30 mt-4 mb-2'
+                                text={'Cформировать'}
+                                onClick={handleForm} />
+                            </Col>
+                        </Row>
                     </>
                 }
             </Card.Body>

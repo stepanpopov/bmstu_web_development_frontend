@@ -11,6 +11,7 @@ export interface DataServiceCardProps {
     childButton?: JSX.Element
     imgStyle?: React.CSSProperties
     children?: JSX.Element
+    cardStyle?: React.CSSProperties
 }
 
 const handlerImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -18,22 +19,22 @@ const handlerImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = img;
 }
 
-const DataServiceCard = ({ ds, onClick, imgStyle, childButton, children }: DataServiceCardProps) => {
+const DataServiceCard = ({ ds, onClick, imgStyle, childButton, children, cardStyle }: DataServiceCardProps) => {
 
     let onClickHandler = undefined;
     if (onClick) {
         onClickHandler = () => onClick(ds.id)
     }
 
-    const imgCurStyle = imgStyle ?? { width: '100%', height: '100%' };
+    const imgCurStyle = imgStyle ?? { width: '100%', height: '100%', maxHeight: '70%' };
 
     return (
-        <Card className="card" style={{width: '70', height: '70'}}>
+        <Card className="card" style={cardStyle ?? {width: '70%', height: '70%'}}>
             {ds.active ?
                 <>
                     <Card.Img src={ds.image} alt='' style={imgCurStyle} onError={handlerImgError} />
                     <Card.ImgOverlay style={{width: '70', height: '70'}} >
-                        <Card.Body style={{width: '70', height: '70'}}>
+                        <Card.Body>
                             <div onClick={onClickHandler}>
                                 <Card.Title >{ds.name}</Card.Title>
                                 <div className='card_id'>  ID: {ds.id} </div>

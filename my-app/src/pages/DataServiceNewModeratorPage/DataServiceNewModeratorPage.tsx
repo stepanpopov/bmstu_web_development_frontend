@@ -1,4 +1,4 @@
-import { Container, Form, Image } from 'react-bootstrap';
+import { Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import { useAppDispatch } from "../../store/index.ts";
@@ -76,10 +76,20 @@ const DataServiceNewModeratorPage = ({ setPage, servicesPageLink }: Props) => {
 
     return (
         <Container style={{marginBottom: '10%'}}>
+
+            <Row className='mb-4'>
+                <Col lg={2}>
+                    <Button variant='success' onClick={onSaveClick} text={'Сохранить'} />
+                </Col>
+                <Col lg={2}>
+                    <Button variant='outline-dark' onClick={onCancelClick} text={'Отменить'} />
+                </Col>
+            </Row>
+
             <Form >
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                     <Form.Label>Название</Form.Label>
-                    <Form.Control as="textarea" placeholder="Название" value={name} onChange={(e) => setName(e.target.value)} />
+                    <Form.Control type='text' placeholder="Название" value={name} onChange={(e) => setName(e.target.value)} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Данные</Form.Label>
@@ -98,17 +108,15 @@ const DataServiceNewModeratorPage = ({ setPage, servicesPageLink }: Props) => {
                     label='Шифрование'
                     checked={encode}
                     onChange={() => setEncode(!encode)}
+                    className='mb-4'
                 />
-                <Form.Group controlId="formFile" className="mb-3">
+                <Form.Group controlId="formFile" className="mb-3 w-10">
                     <Form.Label>Изображение для данных</Form.Label>
                     <Form.Control type="file"
                         onChange={handleSelectedFile} />
                 </Form.Group>
 
                 {coverPreview && <Image src={coverPreview} alt='' style={{ width: '40%', height: '40%' }} onError={handlerImgError} />}
-
-                <Button onClick={onSaveClick} text={'Сохранить'} />
-                <Button onClick={onCancelClick} text={'Отменить'} />
             </Form>
 
         </Container>

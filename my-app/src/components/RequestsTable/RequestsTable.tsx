@@ -43,7 +43,7 @@ const RequestsTable = ({ requests, isModerator }: Props) => {
     const onRejectClick = (id: number) => () => (dispatch(updateModeratorReq({ id, action: 'reject' })))
 
     return (
-        <Table striped bordered hover style={{marginBottom: '10%', marginTop: '3%'}}>
+        <Table striped bordered hover style={{marginBottom: '3%', marginTop: '3%'}}>
             <thead>
                 <tr>
                     <th>Номер заявки</th>
@@ -55,7 +55,7 @@ const RequestsTable = ({ requests, isModerator }: Props) => {
                     <th>Код исправления ошибок</th>
                     <th>Посчитанные результаты</th>
                     <th></th>
-                    <th style={{width: '100%'}}></th>
+                    {isModerator && <th style={{width: '100%'}} ></th>}
                 </tr>
             </thead>
             <tbody>
@@ -69,11 +69,11 @@ const RequestsTable = ({ requests, isModerator }: Props) => {
                         <td>{convertNumDateToView(req.finishDate)}</td>
                         <td>{req.encoding}</td>
                         <td>{req.resultCounter}</td>
-                        <td><Button text='Подробнее' onClick={handleKnowMoreButtonClick(req.id)} /> </td>
+                        <td className='text-center'><Button text='Подробнее' onClick={handleKnowMoreButtonClick(req.id)} /> </td>
                         {isModerator && req.status === 'formed' &&
                             <Container>
-                                <Button text='Подтвердить' onClick={onFinishClick(req.id)} /> 
-                                <Button text='Отменить' onClick={onRejectClick(req.id)} />
+                                <Button variant='success' text='Подтвердить' onClick={onFinishClick(req.id)} /> 
+                                <Button variant='outline-dark' text='Отменить' onClick={onRejectClick(req.id)} />
                             </Container>
                         }
                     </tr>

@@ -12,12 +12,12 @@ const Breadcrumbs = ({ pages }: BreadcrumbsProps) => {
   return (
       <nav style={{marginBottom: '2%'}} className="breadcrumbs">
           {
-            pages.map((p: Page) => (
+            pages.map((p: Page, indx) => (
                 <Link to={p.link}
                     className={location.pathname === p.link ? "breadcrumb-active" : "breadcrumb-not-active"}
                     key={p.link}
                 >
-                    {p.title + '/'}
+                    { (indx !== 0 ? ' > ' : '') + p.title + ' '}
                 </Link>
             ))
         }

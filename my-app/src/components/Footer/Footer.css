@@ -1,11 +1,8 @@
 footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: green;
-    color: white;
+    color: rgb(1, 27, 7);
     text-align: center;
     padding: 10px;
-    margin-bottom: 1000;
+    height: 10%;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 -4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.01);
 }

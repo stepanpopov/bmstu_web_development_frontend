@@ -62,11 +62,11 @@ const RequestsInputFilter = ({ isModerator }: Props) => {
 
     return (
         <Row style={{ display: "flex", width: "100%" }} className="align-items-end">
-            <Col lg={5}>
-            {isModerator &&
-                <input style={{width: "100%"}} value={creator} type="text" placeholder={'Поиск по имени создателя'} onChange={(event => setCreator(event.target.value))} />
+            {isModerator && 
+                <Col lg={5}>
+                    <Form.Control type="text" placeholder='Поиск по имени создателя' onChange={(event => setCreator(event.target.value))} />
+                </Col> 
             }
-            </Col>
             <Col>
             <Form.Select value={status} aria-label="Default select example" onChange={(e) => setStatus(getStatusFromString(e.target.value))}>
                 <option>{'Любой'}</option>
@@ -87,7 +87,9 @@ const RequestsInputFilter = ({ isModerator }: Props) => {
                 <Form.Control value={endDate} type="date" name="end" onChange={(e) => setEndDate(getDateLayout(new Date(e.target.value)))} />
             </Form.Group>
             </Col>
-            <Button text={'Поиск'} onClick={onFindButtonClick} />
+            <Col>
+                <Button className="w-100" text={'Поиск'} onClick={onFindButtonClick} />
+            </Col>
         </Row>
     );
 };

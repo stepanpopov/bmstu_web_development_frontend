@@ -1,11 +1,13 @@
 .breadcrumb-not-active {
-    color: #acacac;
-    font-size: 130%;
+    color: #2f0248;
+    font-size: 100%;
+    text-decoration: none;
 }
   
 .breadcrumb-active {
-    color: #32084a;
-    font-size: 130%;
+    color: #acacac;
+    font-size: 100%;
+    text-decoration: none;
 }
   
 .breadcrumb-arrow {
@@ -14,11 +16,11 @@
 }
 
 .breadcrumbs {
-    border-radius: 15px;
-    box-shadow: 0 4px 30px -10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.4);
     width: fit-content;
-    background: rgb(202, 232, 202);
     padding: 10px 24px;
     display: flex;
+    margin-left: 1%;
     margin-top: 1%;
 }

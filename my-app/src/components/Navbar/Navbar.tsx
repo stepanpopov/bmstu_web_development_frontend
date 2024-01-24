@@ -61,24 +61,30 @@ const MyNavbar = ({ title, mainPageLink, servicesModeratorPageLink, loginPageLin
   }
 
   return (
-    <Navbar expand="lg">
+    <Navbar bg="light" expand="lg" className="fixed-top">
       <Container fluid style={{ width: "100%" }}>
         <Row style={{ display: "flex", width: "100%", margin: "1% 0% 1% 0%", justifyContent: "start" }} className="align-items-end">
-          <Col lg={user ? 3 : 8} className='navbar_title'>
+          <Col lg={user ? 4 : 8} className='navbar_title'>
             <Link to={mainPageLink} className='link'>
               {title}
             </Link>
           </Col>
           {user?.role === 'user' && <Col lg="5">
-            <Button variant="outline-warning" onClick={requestsHandler} disabled={!user} >Шифрование кодом Хэмминга</Button>
+            <Link to={requestsPageLink} className='link'>
+              Управление шифрованием
+            </Link>
           </Col>}
           {user?.role === 'moderator' &&
               <Col lg="2">
-                <Button variant="outline-warning" onClick={requestsModeratorHandler}> Управление шифрованием </Button>
+                <Link to={requestsModeratorPageLink} className='link'>
+              Управление шифрованием
+            </Link>
               </Col>}
           {user?.role === 'moderator' &&
               <Col lg="3">
-                <Button variant="outline-warning" onClick={servicesModeratorHandler}> Управление данными </Button>
+                <Link to={servicesModeratorPageLink} className='link'>
+                    Управление данными
+                </Link>
               </Col>}
   
           {user &&
@@ -88,18 +94,18 @@ const MyNavbar = ({ title, mainPageLink, servicesModeratorPageLink, loginPageLin
 
           {user &&
              <Col lg="2" className="ml-auto">
-              <Button variant="outline-warning" onClick={logoutHandler} >Выйти</Button>
+              <Button variant="outline-dark" onClick={logoutHandler} >Выйти</Button>
            </Col>
           }
 
           { !user &&
               <Col lg="1" className="align-self-end">
-                <Button variant="outline-warning" onClick={loginHandler} >Войти</Button>
+                <Button variant="outline-dark" onClick={loginHandler} >Войти</Button>
               </Col> }
 
           { !user &&
               <Col className="align-self-end">
-                <Button variant="outline-warning" onClick={registerHandler} >Зарегистрироваться</Button>
+                <Button variant="outline-dark" onClick={registerHandler} >Зарегистрироваться</Button>
               </Col> }
         </Row>
       </Container>

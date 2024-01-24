@@ -58,8 +58,10 @@ export const App = () => {
 
   return (
     <Container fluid style={{ padding: "0%" }}>
-
-      <Navbar title={navTitle}
+    
+    <div className="d-flex flex-column min-vh-100">
+    <main className="flex-grow-1">
+    <Navbar title={navTitle}
         mainPageLink={mainPage.link}
         loginPageLink={loginPage.link}
         registerPageLink={registerPage.link}
@@ -123,10 +125,9 @@ export const App = () => {
         </Route>
 
       </Routes>
-
+    </main>
       <Footer text={footerTitle} />
-
-
+    </div>
     </Container >
   )
 }

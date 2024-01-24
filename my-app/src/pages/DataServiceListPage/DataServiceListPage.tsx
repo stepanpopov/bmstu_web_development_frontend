@@ -60,7 +60,7 @@ const DataServiceListPage = ({ setPage, requestsPageLink }: Props) => {
                     <InputFilter searchValue={searchValue} setSearchValue={setSearchValue} />
                 </Col>
                 <Col lg={2}>
-                    <Button variant="outline-warning" onClick={onDraftClick} disabled={!draftActive || !user} >
+                    <Button variant="outline-secondary" onClick={onDraftClick} disabled={!draftActive || !user} >
                         {/* <Image src={draftImg} style={{ maxWidth: '10%', maxHeight: '10%' }} /> */}
                         Корзина
                     </Button>

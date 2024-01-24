@@ -36,18 +36,16 @@ const DataServiceList = ({ searchValue }: DataServiceListProps) => {
         return <Loader />
     }
 
-    //const moderatorEditHandler = (id: number) => (navigate(`service/${id}/`, { state: { title: } })
-    //const moderatorRemoveHandler = 
-
     return (
         <Container className="cards">
             {dataServices.filter((ds) => (ds.active)).map((ds) => (
                 <DataServiceCard
+                    cardStyle={{width: '100%', height: '30rem'}}
                     ds={ds}
                     onClick={(id) => (navigate(`service/${id}`, { state: { title: ds.name } }))}
                     key={ds.id}
-                    childButton={
-                        <Button text={'Добавить в корзину'} onClick={handleAddToDraft(ds.id)} disabled={!isAuth} />
+                    childButton = {
+                        <Button className='mb-2 mt-4' variant='outline-primary' text={'Добавить в корзину'} onClick={handleAddToDraft(ds.id)} disabled={!isAuth} />
                     }
                 />
             ))}

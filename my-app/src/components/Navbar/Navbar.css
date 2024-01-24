@@ -20,11 +20,11 @@
 }*/
 
 .navbar {
-    background-color: green;
-    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.11);
+    margin-bottom: 500%;
 }
 
 .navbar .link {
     text-decoration: none;
-    color: white;
+    color: rgb(107, 100, 100);
 }

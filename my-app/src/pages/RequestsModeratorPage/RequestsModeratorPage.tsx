@@ -17,7 +17,7 @@ interface Props {
 }
 
 const RequestsModeratorPage = ({ setPage }: Props) => {
-    const POLLING_INTERVAL = 1000;
+    const POLLING_INTERVAL = 3000;
 
     const dispatch = useAppDispatch()
 
