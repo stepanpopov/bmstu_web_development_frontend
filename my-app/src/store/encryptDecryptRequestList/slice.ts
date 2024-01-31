@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import EncDeqRequest, { Status } from "../../models/encryptDecryptRequest";
-import { filterReqs, filterReqsModerator, getReqByID, getDraft, removeFromDraft, formDraft, FilterReqArgs } from './thunks'
+import { filterReqs, filterReqsModerator, getReqByID, getDraft, removeFromDraft, formDraft, FilterReqArgs, dropDraft } from './thunks'
 import DataService from "../../models/dataService";
 import { filterDataListByName } from "../dataServiceList/thunks"
 import { addToDraft } from "../dataServiceList"
@@ -222,6 +222,11 @@ const slice = createSlice({
       })
       .addCase(formDraft.rejected, (state, action) => {
         state.error = action.error.message ?? "Не удалось выполнить запрос"
+        state.loading = false;
+      })
+      .addCase(dropDraft.fulfilled, (state) => {
+        state.draftID = null
+        state.draft = null
         state.loading = false;
       })
   },

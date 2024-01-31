@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { fetchFilterReqs, FilterReqArgs, fetchReqByID, fetchFormDraft, fetchUpdateModeratorReq, UpdateModeratorReq } from '../../api/encryptDecryptRequest'
+import { fetchFilterReqs, FilterReqArgs, fetchReqByID, fetchFormDraft, fetchUpdateModeratorReq, UpdateModeratorReq, fetchDropDraft } from '../../api/encryptDecryptRequest'
 import { fetchDeleteFromDraft } from '../../api/dataService'
 
 export { type FilterReqArgs } from '../../api/encryptDecryptRequest'
@@ -88,6 +88,24 @@ export const formDraft = createAsyncThunk<void, FormDraft, { state: RootState }>
         }
 
         await fetchFormDraft(arg.id, arg.encodingType)
+    }
+)
+
+export const dropDraft = createAsyncThunk<void, void, { state: RootState }>(
+    'encryptDecryptRequestList/dropDraft',
+    async (_, { getState }) => {
+        const { draftID } = getState().enqDeqReqList
+
+        if (!draftID) {
+            throw new Error("draft id не установлен")
+        }
+
+        const { draft } = getState().enqDeqReqList
+        if (!draft) {
+            throw new Error("draft не установлен")
+        }
+
+        await fetchDropDraft(draftID)
     }
 )
 

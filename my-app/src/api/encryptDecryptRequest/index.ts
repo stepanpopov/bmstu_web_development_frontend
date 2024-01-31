@@ -1,4 +1,5 @@
 export { fetchFilterReqs, type FilterReqArgs } from './fetchFilterReq'
 export { fetchReqByID } from './fetchReqById'
 export { fetchFormDraft } from './fetchFormDraft'
+export { fetchDropDraft } from './fetchDropDraft'
 export { fetchUpdateModeratorReq, type UpdateModeratorReq } from './fetchUpdateModerator'

@@ -5,8 +5,8 @@ import axios from "axios";
 import Cookies from 'js-cookie'
 
 interface RawFilteringResponse {
-    data_service: RawDataService[],
-    draft_id: number,
+    data_service: RawDataService[] | null,
+    draft_id: number | null,
 }
 
 const config = (search: string, token: string) => ({
@@ -20,7 +20,7 @@ const config = (search: string, token: string) => ({
 
 export interface FilterResponse {
     dsList: DataService[],
-    draftId: number,
+    draftId: number | null,
 }
 
 export const fetchDataListByName = async (search: string): Promise<FilterResponse> => {
@@ -28,14 +28,14 @@ export const fetchDataListByName = async (search: string): Promise<FilterRespons
     const resp = await axios<RawFilteringResponse>(config(search, accessToken))
 
 
-    const dsList = resp.data.data_service.map((ds: RawDataService) => ({
+    const dsList = resp.data.data_service ? resp.data.data_service.map((ds: RawDataService) => ({
         id: ds.data_id,
         name: ds.data_name,
         blob: ds.blob,
         image: ds.image_url,
         encode: ds.encode,
         active: ds.active,
-    }))
+    })) : []
     return {
         dsList,
         draftId: resp.data.draft_id,

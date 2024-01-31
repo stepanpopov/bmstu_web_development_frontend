@@ -2,13 +2,14 @@ import './RequestCard.css'
 import { Card, Col, Form, Row } from 'react-bootstrap';
 
 import { useAppDispatch } from "../../store";
-import { formDraft } from '../../store/encryptDecryptRequestList'
+import { formDraft, dropDraft } from '../../store/encryptDecryptRequestList'
 import Button from '../Button/Button.tsx';
 import Request, { Status, getEncodingFromString } from '../../models/encryptDecryptRequest.ts';
 import { EncodingTypes, Encoding } from '../../models/encryptDecryptRequest.ts';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { requestsPage } from '../../consts.tsx';
+import {fetchDropDraft} from '../../api/encryptDecryptRequest'
 
 export interface Props {
     request: Request
@@ -46,6 +47,10 @@ const RequestCard = ({ request }: Props) => {
         navigate(requestsPage.link)
     }
 
+    const handleDelete = async () => {
+        dispatch(dropDraft())
+    }
+
     return (
         <Card className="request_card">
             <Card.Header style={{ fontWeight: 'bold', fontSize: '130%' }}>{request.id}</Card.Header>
@@ -67,11 +72,17 @@ const RequestCard = ({ request }: Props) => {
                             </Col>
                         </Row>
                         <Row>
-                            <Col>
+                            <Col lg={2}>
                                 <Button
                                 className='w-30 mt-4 mb-2'
                                 text={'Cформировать'}
                                 onClick={handleForm} />
+                            </Col>
+                            <Col>
+                                <Button
+                                className='w-30 mt-4 mb-2'
+                                text={'Удалить'}
+                                onClick={handleDelete} />
                             </Col>
                         </Row>
                     </>

@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { SetPageTitleLink } from '../../models/common';
 import { useEffect } from 'react';
 import { useAppDispatch } from '../../store';
-import { getReqByID, removeFromDraft, useLoading, useReqWithDSByID } from '../../store/encryptDecryptRequestList';
+import { getReqByID, removeFromDraft, useLoading, useReqWithDSByID, useDraftID } from '../../store/encryptDecryptRequestList';
 import { Loader } from '../../components/Loader/Loader';
 import { Container } from 'react-bootstrap';
 import Button from '../../components/Button/Button';
@@ -44,11 +44,12 @@ const RequestPage = ({ setPage }: Props) => {
 
     const dispatch = useAppDispatch()
 
+    const { request, dsList } = useReqWithDSByID(requestID)
+    const draftID = useDraftID()
+
     useEffect(() => {
         dispatch(getReqByID(requestID))
-    }, [requestID])
-
-    const { request, dsList } = useReqWithDSByID(requestID)
+    }, [requestID, draftID])
 
     const handleRemoveFromDraft = (id: number) => () => dispatch(removeFromDraft(id))
     const childButtonDS = (isDraft: boolean, id: number) =>
@@ -62,6 +63,14 @@ const RequestPage = ({ setPage }: Props) => {
 
     const showRes = (ds: DataService) => ds.active && ((user?.role === 'user' && request.status === 'finished') || 
         (user?.role === 'moderator' && (request.status === 'finished' || request.status === 'deleted' || request.status === 'formed')))
+
+    if (request.status === 'deleted') {
+        return (
+            <h2>
+                Заявка удалена
+            </h2>
+        )
+    }
 
     return (
         <>
