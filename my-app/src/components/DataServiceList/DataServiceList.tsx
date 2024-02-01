@@ -27,7 +27,7 @@ const DataServiceList = ({ searchValue }: DataServiceListProps) => {
 
     useEffect(() => {
         dispatch(filterDataListByName(searchValue))
-    }, [searchValue, dispatch])
+    }, [searchValue])
 
     const handleAddToDraft = (id: number) => () => dispatch(addToDraft(id))
 

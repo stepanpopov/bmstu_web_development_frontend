@@ -45,11 +45,11 @@ const RequestPage = ({ setPage }: Props) => {
     const dispatch = useAppDispatch()
 
     const { request, dsList } = useReqWithDSByID(requestID)
-    const draftID = useDraftID()
+    // const draftID = useDraftID()
 
     useEffect(() => {
         dispatch(getReqByID(requestID))
-    }, [requestID, draftID])
+    }, [requestID])
 
     const handleRemoveFromDraft = (id: number) => () => dispatch(removeFromDraft(id))
     const childButtonDS = (isDraft: boolean, id: number) =>
