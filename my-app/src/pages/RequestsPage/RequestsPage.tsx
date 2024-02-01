@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SetPage } from '../../models/common.ts';
 
 import { useAppDispatch } from "../../store";
-import { enqDeqReqListActions, useError, useDraft, filterReqs, useOtherReqList } from '../../store/encryptDecryptRequestList'
+import { enqDeqReqListActions, useError, useDraft, filterReqs, useReqList } from '../../store/encryptDecryptRequestList'
 import RequestsInputFilter from '../../components/RequestsInputFilter/RequestsInputFilter.tsx';
 import { useReqFilter } from '../../store/encryptDecryptRequestList/selectors.ts';
 
@@ -28,11 +28,11 @@ const RequestsPage = ({ setPage }: Props) => {
     }, [])
 
 
-    const draftReq = useDraft()
-    const otherReqs = useOtherReqList()
+    // const draftReq = useDraft()
+    const reqs = useReqList()
 
-    const isStatusForDraft = (filters.status === 'draft' || filters.status === undefined)
-    const reqsWithDraft = (draftReq && isStatusForDraft) ? [draftReq, ...otherReqs] : otherReqs
+    // const isStatusForDraft = (filters.status === 'draft' || filters.status === undefined)
+    // const reqsWithDraft = (draftReq && isStatusForDraft) ? [draftReq, ...reqs] : reqs
 
     // const loading = useLoadingFilterReqs()
     const error = useError()
@@ -49,9 +49,9 @@ const RequestsPage = ({ setPage }: Props) => {
         <Container>
             <ToastContainer position="top-center" newestOnTop={false} />
             <RequestsInputFilter />
-            {reqsWithDraft.length === 0 || reqsWithDraft === undefined ?
+            {reqs.length === 0 || reqs === undefined ?
                 <h3>Нет заявок</h3> :
-                <RequestsTable requests={reqsWithDraft} />
+                <RequestsTable requests={reqs} />
             }
         </Container>
     );

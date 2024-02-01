@@ -10,7 +10,7 @@ import { SetPage } from '../../models/common.ts';
 import { useAppDispatch } from "../../store";
 import { enqDeqReqListActions, useError, filterReqs, filterReqsModerator } from '../../store/encryptDecryptRequestList'
 import RequestsInputFilter from '../../components/RequestsInputFilter/RequestsInputFilter.tsx';
-import { useOtherReqList, useReqFilter } from '../../store/encryptDecryptRequestList/selectors.ts';
+import { useReqList, useReqFilter } from '../../store/encryptDecryptRequestList/selectors.ts';
 
 interface Props {
     setPage: SetPage
@@ -36,7 +36,7 @@ const RequestsModeratorPage = ({ setPage }: Props) => {
     }, [filters])
 
     // const draftReq = useDraft()
-    const reqs = useOtherReqList()
+    const reqs = useReqList()
     // const reqsWithDraft = draftReq ? [draftReq, ...otherReqs] : otherReqs
 
     // const loading = useLoadingFilterReqs()

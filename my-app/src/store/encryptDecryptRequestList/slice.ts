@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import EncDeqRequest, { Status } from "../../models/encryptDecryptRequest";
-import { filterReqs, filterReqsModerator, getReqByID, getDraft, removeFromDraft, formDraft, FilterReqArgs, dropDraft } from './thunks'
+import { filterReqs, filterReqsModerator, getReqByID, removeFromDraft, formDraft, FilterReqArgs, dropDraft } from './thunks'
 import DataService from "../../models/dataService";
 import { filterDataListByName } from "../dataServiceList/thunks"
 import { addToDraft } from "../dataServiceList"
@@ -18,11 +18,9 @@ export interface Filter extends FilterReqArgs {
   creator?: string
 }
 
-interface State {
+export interface State {
   dsList: DataService[],
-  otherReqs: Reqs,
-  draftID: number | null,
-  draft: Req | null
+  reqs: Reqs,
   loading: boolean
   loadingFilterReqs: boolean
   error: string | null
@@ -31,9 +29,7 @@ interface State {
 }
 
 const initialState: State = {
-  draftID: null,
-  draft: null,
-  otherReqs: {},
+  reqs: {},
   dsList: [],
   loading: true,
   loadingFilterReqs: true,
@@ -41,28 +37,24 @@ const initialState: State = {
   filter: {},
 }
 
+const getDraftID = (state: State) => {
+  let req: Req;
+  for (req of (Object.values(state.reqs))) {
+    if (req.req.status === 'draft') {
+      return req.req.id
+    }
+  }
+
+  return -1
+}
+
 const setReqs = (state: State, action: PayloadAction<EncDeqRequest[]>) => {
   const reqList = action.payload;
-  state.otherReqs = reqList.reduce((reqs: Reqs, req) => {
-    if (req.status === "draft" && state.draft) {
-      state.draft.req = req
-      state.draftID = req.id
-      return reqs
-    }
-    if (req.status === "draft" && !state.draft) {
-      state.draft = {
-        req: req,
-        reqDs: [],
-      }
-      state.draftID = req.id
-      return reqs
-    }
-
+  state.reqs = reqList.reduce((reqs: Reqs, req) => {
     reqs[req.id] = {
       req: req,
       reqDs: [],
     }
-
     return reqs
   }, {})
   state.loadingFilterReqs = false
@@ -70,27 +62,13 @@ const setReqs = (state: State, action: PayloadAction<EncDeqRequest[]>) => {
 }
 
 const setReq = (state: State, request: EncDeqRequest) => {
-  if (request.status === "draft" && state.draft) {
-    state.draft.req = request
-    state.draftID = request.id
-    return
-  }
-  if (request.status === "draft" && !state.draft) {
-    state.draft = {
-      req: request,
-      reqDs: [],
-    }
-    state.draftID = request.id
-    return
-  }
-
-  const curReq = state.otherReqs[request.id]
+  const curReq = state.reqs[request.id]
   if (curReq) {
-    state.otherReqs[request.id].req = request
+    state.reqs[request.id].req = request
     return
   }
 
-  state.otherReqs[request.id] = {
+  state.reqs[request.id] = {
     req: request,
     reqDs: [],
   }
@@ -113,12 +91,7 @@ const setDSNumbersforReq = (state: State, dsList: DataService[], requestID: numb
 
   const dsListNumbers = Array.from(new Set(dsList.map((ds) => ds.id)))
 
-  if (status === "draft" && state.draft) {
-    state.draft.reqDs = dsListNumbers
-    return
-  }
-
-  state.otherReqs[requestID].reqDs = dsListNumbers
+  state.reqs[requestID].reqDs = dsListNumbers
 }
 
 const slice = createSlice({
@@ -139,7 +112,6 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(filterDataListByName.fulfilled, (state, action) => {
-        state.draftID = action.payload.draftId
       })
       .addCase(filterReqs.fulfilled, setReqs)
       .addCase(filterReqs.rejected, (state, action) => {
@@ -174,33 +146,16 @@ const slice = createSlice({
       .addCase(getReqByID.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getDraft.fulfilled, (state, action) => {
-        const req = action.payload[0]
-        const dsList = action.payload[1]
-
-        setReq(state, req)
-        setDSNumbersforReq(state, dsList, req.id, req.status)
-
-        state.loading = false;
-        state.error = null
-      })
-      .addCase(getDraft.rejected, (state, action) => {
-        state.error = action.error.message ?? "Не удалось выполнить запрос"
-        state.loading = false;
-      })
-      .addCase(getDraft.pending, (state) => {
-        state.loading = true;
-      })
       .addCase(addToDraft.fulfilled, (state, action) => {
         console.log('addToDraft.fulfilled')
         console.log('action.payload', action.payload)
-        state.draftID = action.payload
         state.loading = false;
       })
       .addCase(removeFromDraft.fulfilled, (state, action) => {
-        if (state.draft) {
-          state.draft.reqDs = state.draft.reqDs.filter((id) => id !== action.meta.arg)
-        }
+        const draftID = getDraftID(state)
+        console.log('DRAFT ID:', draftID)
+        console.log('DRAFT:', state.reqs[draftID])
+        state.reqs[draftID].reqDs = state.reqs[draftID].reqDs.filter((id) => id !== action.meta.arg)
         state.loading = false;
       })
       .addCase(removeFromDraft.pending, (state) => {
@@ -212,9 +167,10 @@ const slice = createSlice({
       })
       .addCase(formDraft.fulfilled, (state) => {
         console.log('formDraft.fulfilled')
-        state.draftID = null
-        state.draft = null
-        console.log('state.draftID, state.draft', state.draftID, state.draft)
+        const draftID = getDraftID(state)
+        if (draftID !== -1) {
+          state.reqs[draftID].req.status = 'formed'
+        }
         state.loading = false;
       })
       .addCase(formDraft.pending, (state) => {
@@ -224,9 +180,8 @@ const slice = createSlice({
         state.error = action.error.message ?? "Не удалось выполнить запрос"
         state.loading = false;
       })
-      .addCase(dropDraft.fulfilled, (state) => {
-        state.draftID = null
-        state.draft = null
+      .addCase(dropDraft.fulfilled, (state, action) => {
+        state.reqs[action.meta.arg].req.status = "deleted"
         state.loading = false;
       })
   },

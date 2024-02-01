@@ -23,7 +23,7 @@ export const fetchReqByID = async (id: number): Promise<[EncryptDecryptRequest, 
     const accessToken = Cookies.get(JWT_TOKEN_COOKIE) ?? "";
 
     const resp = await axios<RawResponse>(config(accessToken, id))
-    const dsList: DataService[] = resp.data.dataServices.map((ds: RawDataService) => ({
+    const dsList: DataService[] = resp.data.dataServices?.map((ds: RawDataService) => ({
         id: ds.data_id,
         name: ds.data_name,
         blob: ds.blob,
@@ -32,7 +32,7 @@ export const fetchReqByID = async (id: number): Promise<[EncryptDecryptRequest, 
         active: ds.active,
         result: (ds.result === null ? undefined : ds.result),
         success: (ds.success === null ? undefined : ds.success)
-    }))
+    })) ?? [];
 
     const r = resp.data.encDecReq
     const req: EncryptDecryptRequest = {

@@ -59,7 +59,7 @@ const RequestsTable = ({ requests, isModerator }: Props) => {
                 </tr>
             </thead>
             <tbody>
-                {requests.map((req) => (
+                {requests.filter((req) => req.status !== 'deleted').map((req) => (
                     <tr key={req.id}>
                         <td>{req.id}</td>
                         {isModerator && <td>{req.creator}</td>}

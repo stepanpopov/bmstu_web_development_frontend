@@ -30,7 +30,6 @@ const DataServiceListPage = ({ setPage, moderatorNewDSPageLink }: Props) => {
     const [searchValue, setSearchValue] = useState('')
     const dispatch = useAppDispatch()
     const error = useError()
-    const successAddToDraft = useSuccessAddToDraft()
     const navigate = useNavigate()
     const user = useUser()
     const dataServices = useDataServices()
@@ -46,13 +45,6 @@ const DataServiceListPage = ({ setPage, moderatorNewDSPageLink }: Props) => {
     useEffect(() => {
         dispatch(filterDataListByName(searchValue))
     }, [searchValue, dispatch])
-
-    useEffect(() => {
-        if (successAddToDraft) {
-            toast.success('Added to draft')
-            dispatch(dataServiceListActions.resetSuccess())
-        }
-    }, [successAddToDraft])
 
     const handleRemove = (id: number) => () => dispatch(deleteDS(id))
 

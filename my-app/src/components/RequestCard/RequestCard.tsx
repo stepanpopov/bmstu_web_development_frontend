@@ -48,7 +48,7 @@ const RequestCard = ({ request }: Props) => {
     }
 
     const handleDelete = async () => {
-        dispatch(dropDraft())
+        dispatch(dropDraft(request.id))
     }
 
     return (

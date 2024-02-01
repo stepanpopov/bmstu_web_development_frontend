@@ -9,8 +9,6 @@ const getStatusView = (status: Status) => {
     switch (status) {
         case 'draft':
             return 'Черновик'
-        case 'deleted':
-            return 'Удален'
         case 'finished':
             return 'Завершен'
         case 'formed':
@@ -34,8 +32,8 @@ const RequestsInputFilter = ({ isModerator }: Props) => {
     const filters = useReqFilter()
 
     const [status, setStatus] = useState<Status | undefined>(filters.status)
-    const [startDate, setStartDate] = useState<string | undefined>(filters.startDate)
-    const [endDate, setEndDate] = useState<string | undefined>(filters.endDate)
+    const [startDate, setStartDate] = useState<string>(filters.startDate ?? "")
+    const [endDate, setEndDate] = useState<string>(filters.endDate ?? "")
     const [creator, setCreator] = useState<string | undefined>(filters.creator)
     const filtersFromState = {
         status,
@@ -70,7 +68,7 @@ const RequestsInputFilter = ({ isModerator }: Props) => {
             <Col>
             <Form.Select value={status} aria-label="Default select example" onChange={(e) => setStatus(getStatusFromString(e.target.value))}>
                 <option>{'Любой'}</option>
-                {statusOptList.map((status) => (
+                {statusOptList.filter((st) => st !== 'deleted').map((status) => (
                     <option key={status} value={status}>{getStatusView(status)}</option>
                 ))}
             </ Form.Select >
@@ -78,13 +76,13 @@ const RequestsInputFilter = ({ isModerator }: Props) => {
             <Col>
             <Form.Group controlId="dob">
                 <Form.Label>С какого дня</Form.Label>
-                <Form.Control value={startDate} type="date" name="start" onChange={(e) => setStartDate(getDateLayout(new Date(e.target.value)))} />
+                <Form.Control value={startDate} type="date" name="start" onChange={(e) => {e.target.value === "" ? setStartDate("") : setStartDate(getDateLayout(new Date(e.target.value))) }} />
             </Form.Group>
             </Col>
             <Col>
             <Form.Group controlId="dob">
                 <Form.Label>По какой день</Form.Label>
-                <Form.Control value={endDate} type="date" name="end" onChange={(e) => setEndDate(getDateLayout(new Date(e.target.value)))} />
+                <Form.Control value={endDate} type="date" name="end" onChange={(e) => e.target.value === "" ? setEndDate("") : setEndDate(getDateLayout(new Date(e.target.value)))} />
             </Form.Group>
             </Col>
             <Col>

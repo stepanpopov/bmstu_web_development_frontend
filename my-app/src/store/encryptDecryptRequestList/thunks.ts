@@ -36,34 +36,9 @@ export const getReqByID = createAsyncThunk<[EncryptDecryptRequst, DataService[]]
     }
 )
 
-export const getDraft = createAsyncThunk<[EncryptDecryptRequst, DataService[]], void, { rejectValue: string, state: RootState }>(
-    'encryptDecryptRequestList/getDraft',
-    async (_, { getState, rejectWithValue }) => {
-        const { draftID } = getState().enqDeqReqList
-
-        if (!draftID) {
-            throw new Error("draft id не установлен")
-        }
-
-        const req = await fetchReqByID(draftID);
-        return req
-    }
-)
-
 export const removeFromDraft = createAsyncThunk<void, number, { state: RootState }>(
     'encryptDecryptRequestList/deleteFromDraft',
-    async (id, { getState }) => {
-        const { draftID } = getState().enqDeqReqList
-
-        if (!draftID) {
-            throw new Error("draft id не установлен")
-        }
-
-        const { draft } = getState().enqDeqReqList
-        if (!draft) {
-            throw new Error("draft не установлен")
-        }
-
+    async (id) => {
         await fetchDeleteFromDraft(id)
     }
 )
@@ -75,36 +50,14 @@ interface FormDraft {
 
 export const formDraft = createAsyncThunk<void, FormDraft, { state: RootState }>(
     'encryptDecryptRequestList/formDraft',
-    async (arg, { getState }) => {
-        const { draftID } = getState().enqDeqReqList
-
-        if (!draftID) {
-            throw new Error("draft id не установлен")
-        }
-
-        const { draft } = getState().enqDeqReqList
-        if (!draft) {
-            throw new Error("draft не установлен")
-        }
-
+    async (arg) => {
         await fetchFormDraft(arg.id, arg.encodingType)
     }
 )
 
-export const dropDraft = createAsyncThunk<void, void, { state: RootState }>(
+export const dropDraft = createAsyncThunk<void, number, { state: RootState }>(
     'encryptDecryptRequestList/dropDraft',
-    async (_, { getState }) => {
-        const { draftID } = getState().enqDeqReqList
-
-        if (!draftID) {
-            throw new Error("draft id не установлен")
-        }
-
-        const { draft } = getState().enqDeqReqList
-        if (!draft) {
-            throw new Error("draft не установлен")
-        }
-
+    async (draftID) => {
         await fetchDropDraft(draftID)
     }
 )
